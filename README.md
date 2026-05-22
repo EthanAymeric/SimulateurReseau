@@ -38,3 +38,5 @@ Affichage IP décimal pointé
 Affichage MAC hexadécimal
 Affiche Table de commutation du switch
 etc.
+
+Ordnanceur d'event, boucler sur toute les machines et traiter la queue de chaque machine
