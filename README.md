@@ -43,6 +43,6 @@ Ordnanceur d'event, boucler sur toute les machines et traiter la queue de chaque
 
 ### IP 
 
-Chaque octet de l'adresse et du masque est représenté sous forme de byte/uint8_t (donc un tableau de 4 bytes pour l'adresse entière). Cette structure sert principalement à de l'affichage, d'où sa fonction `get_string`. Ses attributs sont cachés. Chaque méthode (sauf `init`) renvoie une énumération d'erreurs spécifique à **ip**. 
+Chaque octet de l'adresse et le masque sont représentés sous forme de byte/uint8_t (donc un tableau de 4 bytes pour l'adresse entière). Cette structure sert principalement à de l'affichage, d'où sa fonction `get_string`. Ses attributs sont cachés. Chaque méthode (sauf `init`) renvoie une énumération d'erreurs spécifique à **ip**. 
 
 **C'est à l'appelant d'IP de vérifier que l'allocation lors de `init` est réussie.** 
