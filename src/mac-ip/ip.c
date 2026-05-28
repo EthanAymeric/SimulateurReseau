@@ -53,6 +53,8 @@ ERREUR_IP ip_get_string(ip* ip, char* str, size_t taille_str){
         return err;
     }
 
+    memset(str, '\0', sizeof(char));
+
     int nb_ecrit = snprintf(str, taille_str, "%d.%d.%d.%d/%d", ip->adresse[0], ip->adresse[1], ip->adresse[2], ip->adresse[3], ip->cidr);
     if (nb_ecrit < 0 || (size_t)nb_ecrit >= taille_str){
         return TAILLE_STRING;
