@@ -40,3 +40,7 @@ Affiche Table de commutation du switch
 etc.
 
 Ordnanceur d'event, boucler sur toute les machines et traiter la queue de chaque machine
+
+# Station (commencé par Ethan)
+# Recheckez mon code et modifier le si nécessaire, parce que je ne suis pas sûr de ce que je fais! 
+Merci beaucoup!
