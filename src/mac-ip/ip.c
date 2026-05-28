@@ -4,7 +4,7 @@
 #include <string.h>
 
 struct ip {
-    char adresse[4];
+    uint8_t adresse[4];
     uint8_t cidr;
 };
 
@@ -47,13 +47,16 @@ ERREUR_IP ip_deinit(ip* ip){
     return OK;
 }
 
-ERREUR_IP ip_get_string(ip* ip, char* str){
+ERREUR_IP ip_get_string(ip* ip, char* str, size_t taille_str){
     ERREUR_IP err;
     if ((err = ip_check_pointeur_null(ip)) != OK){
         return err;
     }
 
-    sprintf(str, "%d.%d.%d.%d/%d", ip->adresse[0], ip->adresse[1], ip->adresse[2], ip->adresse[3], ip->cidr);
+    int nb_ecrit = snprintf(str, taille_str, "%d.%d.%d.%d/%d", ip->adresse[0], ip->adresse[1], ip->adresse[2], ip->adresse[3], ip->cidr);
+    if (nb_ecrit < 0 || (size_t)nb_ecrit >= taille_str){
+        return TAILLE_STRING;
+    }
 
     return OK;
 }
