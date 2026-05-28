@@ -6,9 +6,9 @@ SRC_DIRS ?= .
 
 # All .c files, then exclude test/ dir and main.c for normal build
 ALL_SRCS := $(shell find $(SRC_DIRS) -name "*.c")
-SRCS := $(filter-out ./test/% ./main.c, $(ALL_SRCS))
+SRCS := $(filter-out ./tests/% ./main.c, $(ALL_SRCS))
 
-# Test build: exclude main.c, include test/ dir
+# Test build: exclude main.c, include tests/ dir
 TEST_SRCS := $(filter-out ./main.c, $(ALL_SRCS))
 
 OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
