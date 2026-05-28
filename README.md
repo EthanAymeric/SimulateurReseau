@@ -58,3 +58,6 @@ Une adresse MAC est représentée par un `uint64_t` (entier sur 64 bits). Celle-
 - [ ] refactor les vérifications de paramètres (conditions)
 - [x] écrire des tests pour ip
 - [ ] écrire des tests pour mac
+- [ ] ajouter tests de valeurs pour les set
+- [ ] ajouter fonction `mac_set_octet(mac* mac, int valeur, size_t index)`
+- [ ] ajouter élément `INDEX_OCTET` à `ERREUR_MAC` 
