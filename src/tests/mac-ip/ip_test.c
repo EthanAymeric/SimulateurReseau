@@ -29,3 +29,17 @@ void iptest_set_octet_adresse(){
 
     ip_deinit(a);
 }
+
+
+void iptest_set_cidr(){
+    ip* a = NULL;
+
+    assert(ip_set_cidr(a, 0) == POINTEUR_NULL);
+    
+    a = ip_init();
+    assert(ip_set_cidr(a, -1) == VALEUR_CIDR);
+    assert(ip_set_cidr(a, 33) == VALEUR_CIDR);
+    assert(ip_set_cidr(a, 24) == OK);
+
+    ip_deinit(a);
+}
