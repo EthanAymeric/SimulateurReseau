@@ -1,8 +1,11 @@
 #include "mac.h"
+#include <ctype.h>
+#include <ctype.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/types.h>
 
 const uint8_t NB_BITS = 48;
 const uint8_t OCTET = 8;
@@ -25,6 +28,10 @@ mac* mac_init(){
 
 ERREUR_MAC mac_check_valeur(uint64_t valeur){
     return valeur > 0xFFFFFFFFFFFF ? VALEUR : OK;
+}
+
+ERREUR_MAC mac_check_valeur_octet(int valeur){
+    return (valeur >= 0 && valeur <= 255) ? OK : VALEUR_OCTET;
 }
 
 ERREUR_MAC mac_deinit(mac* mac){
@@ -54,9 +61,18 @@ ERREUR_MAC mac_set_uint64(mac* mac, uint64_t valeur){
     return OK;
 }
 
-ERREUR_MAC mac_set_octets(mac *mac, uint8_t octet1, uint8_t octet2, uint8_t octet3, uint8_t octet4, uint8_t octet5, uint8_t octet6){
+ERREUR_MAC mac_set_octets(mac* mac, int octet1, int octet2, int octet3, int octet4, int octet5, int octet6){
     ERREUR_MAC err;
     if ((err = mac_check_pointeur_null(mac)) != OK){
+        return err;
+    }
+
+    if ((err = mac_check_valeur_octet(octet1)) != OK ||
+            (err = mac_check_valeur_octet(octet2)) != OK ||
+            (err = mac_check_valeur_octet(octet3)) != OK ||
+            (err = mac_check_valeur_octet(octet4)) != OK ||
+            (err = mac_check_valeur_octet(octet5)) != OK ||
+            (err = mac_check_valeur_octet(octet6)) != OK){
         return err;
     }
 
@@ -83,25 +99,39 @@ ERREUR_MAC mac_set_string(mac* mac, char* valeur){
     }
 
     uint octets[6];
-    if (sscanf(valeur, "%x%*c%x%*c%x%*c%x%*c%x%*c%x", &octets[0], &octets[1], &octets[2], &octets[3], &octets[4], &octets[5]) != 6){
+    int caracteres_lus = 0;
+    if (sscanf(valeur, "%x%*c%x%*c%x%*c%x%*c%x%*c%x%n",
+               &octets[0], &octets[1], &octets[2],
+               &octets[3], &octets[4], &octets[5], &caracteres_lus) != 6){
+        return FORMAT_STRING;
+    }
+    // vérifie qu'il n'y ait pas de préfixe 
+    if (!isxdigit((unsigned char)valeur[0])){
+        return FORMAT_STRING;
+    }
+    // vérifie qu'il n'y ait pas de suffixe: valeur doit s'arrêter où sscanf s'est arrêté  
+    if (valeur[caracteres_lus] != '\0'){
         return FORMAT_STRING;
     }
 
-    if ((err = mac_set_octets(mac, octets[0], octets[1], octets[2], octets[3], octets[4], octets[5])) != OK){
+    err = mac_set_octets(mac, octets[0], octets[1], octets[2], octets[3], octets[4], octets[5]);
+    if (err == VALEUR_OCTET){
+        return VALEUR;
+    }
+    else if (err != OK){
         return err;
     }
-
-    printf("valeur: %lu\n", mac->adresse);
 
     return OK;
 }
 
-ERREUR_MAC mac_get_string(mac* mac, char separateur, char* str){
+ERREUR_MAC mac_get_string(mac* mac, char separateur, char* str, size_t taille_str){
     ERREUR_MAC err;
     if ((err = mac_check_pointeur_null(mac)) != OK){
         return err;
     }
 
+    size_t compteur_octets = 0;
     char octet[8]; 
     memset(str, '\0', sizeof(char));
 
@@ -109,12 +139,21 @@ ERREUR_MAC mac_get_string(mac* mac, char separateur, char* str){
     uint64_t masque = (uint64_t)0xFF << (NB_BITS - OCTET);
     for (size_t i = 0; i < (size_t)NB_OCTETS - 1; i++){
         uint8_t byte = (mac->adresse & masque) >> (NB_BITS - (i + 1) * OCTET);
-        sprintf(octet, "%02X%c", byte, separateur);
+        compteur_octets += snprintf(octet, taille_str, "%02X%c", byte, separateur);
+
+        if (compteur_octets >= taille_str){
+            return TAILLE_STRING;
+        }
+
         strcat(str, octet);
         masque >>= OCTET;
     }
 
-    sprintf(octet, "%02X", (uint)(mac->adresse & masque));
+    compteur_octets += snprintf(octet, taille_str, "%02X", (uint)(mac->adresse & masque));
+    if (compteur_octets >= taille_str){
+        return TAILLE_STRING;
+    }
+
     strcat(str, octet);
 
     return OK;
