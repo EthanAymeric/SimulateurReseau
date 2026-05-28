@@ -1,6 +1,6 @@
-#include station.h
-#include ip.c
-#include mac.c
+#include "station.h"
+#include "ip.c"
+#include "mac.c"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -62,6 +62,7 @@ ERREUR_STATION station_set_station(station* station, ip ip, mac mac){
 ERREUR_STATION station_add_relation(station* st1, station* st2){
     /*
     Fonction qui permet de relier deux stations entre elles (pas du tout sûr so c'est la bonne manière de s'y prendre)
-    Corriger si besoin
+    Corriger si besoin svp (ça vaut pour tous mes fichiers comme le dit le READ.me lol)
     */
+    
 }
