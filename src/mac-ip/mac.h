@@ -8,7 +8,7 @@ typedef enum ERREUR_MAC {
     POINTEUR_NULL,
     VALEUR,
     FORMAT_STRING,
-    NULLE
+    OK
 } ERREUR_MAC;
 
 typedef struct mac mac;

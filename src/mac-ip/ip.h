@@ -10,7 +10,7 @@ typedef enum ERREUR_IP {
     INDEX_OCTET,
     VALEUR_OCTET,
     VALEUR_CIDR,
-    NULLE
+    OK
 } ERREUR_IP;
 
 typedef struct ip ip;
