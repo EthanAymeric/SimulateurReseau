@@ -30,6 +30,8 @@ ERREUR_IP ip_check_cidr(uint8_t cidr){
 }
 
 ERREUR_IP ip_check_valeur_octet(int octet){
+    // utilisation de int car 0 <= octet <= 255 et que pour uint8_t octet = -1 ; octet == 255 
+    // On évite ainsi l'absence d'erreur pour octet = -1
     return (octet >= 0 && octet < 256) ? OK : VALEUR_OCTET;
 }
 
