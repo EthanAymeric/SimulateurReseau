@@ -20,11 +20,13 @@ ip* init(){
 }
 
 ERREUR_IP check_index_octet(size_t index){
-    return (index >= 0 && index < 4) ? NULLE : INDEX_OCTET;
+    // index > 0 toujours vrai
+    return index < 4 ? NULLE : INDEX_OCTET;
 }
 
 ERREUR_IP check_cidr(uint8_t cidr){
-    return (cidr >= 0 && cidr <= 32) ? NULLE : VALEUR_CIDR;
+    // cidr > 0 toujours vrai
+    return cidr <= 32 ? NULLE : VALEUR_CIDR;
 }
 
 ERREUR_IP deinit(ip* ip){

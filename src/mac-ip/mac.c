@@ -102,12 +102,12 @@ ERREUR_MAC get_string(mac* mac, char separateur, char* str){
         return err;
     }
 
-    char octet[8];
-    sprintf(str, "");
+    char octet[8]; 
+    memset(str, '\0', sizeof(char));
 
     // pour chaque octet
     uint64_t masque = (uint64_t)0xFF << (NB_BITS - OCTET);
-    for (size_t i = 0; i < NB_OCTETS - 1; i++){
+    for (size_t i = 0; i < (size_t)NB_OCTETS - 1; i++){
         uint8_t byte = (mac->adresse & masque) >> (NB_BITS - (i + 1) * OCTET);
         sprintf(octet, "%02X%c", byte, separateur);
         strcat(str, octet);
