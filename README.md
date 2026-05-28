@@ -40,3 +40,23 @@ Affiche Table de commutation du switch
 etc.
 
 Ordnanceur d'event, boucler sur toute les machines et traiter la queue de chaque machine
+
+### IP 
+
+Chaque octet de l'adresse et le masque sont représentés sous forme de byte/uint8_t (donc un tableau de 4 bytes pour l'adresse entière). Cette structure sert principalement à de l'affichage, d'où sa fonction `get_string`. Ses attributs sont cachés. Chaque méthode (sauf `init`) renvoie une énumération d'erreurs spécifique à **ip**. 
+
+**C'est à l'appelant d'IP de vérifier que l'allocation lors de `init` est réussie.** 
+
+### MAC 
+
+Une adresse MAC est représentée par un `uint64_t` (entier sur 64 bits). Celle-ci faisant uniquement 48 bits, seuls les 48 bits de poids faible sont utilisés. 
+
+**C'est à l'appelant de MAC de vérifier que l'allocation lors de `init` est réussie.** 
+
+# To-Do 
+
+- [ ] refactor les vérifications de paramètres (conditions)
+- [x] écrire des tests pour ip
+- [x] écrire des tests pour mac
+- [x] ajouter fonction `mac_set_octet(mac* mac, int valeur, size_t index)`
+- [x] ajouter élément `INDEX_OCTET` à `ERREUR_MAC` 
