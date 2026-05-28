@@ -56,5 +56,5 @@ Une adresse MAC est représentée par un `uint64_t` (entier sur 64 bits). Celle-
 # To-Do 
 
 - [ ] refactor les vérifications de paramètres (conditions)
-- [ ] écrire des tests pour ip
+- [x] écrire des tests pour ip
 - [ ] écrire des tests pour mac
