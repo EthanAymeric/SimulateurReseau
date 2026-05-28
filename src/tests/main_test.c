@@ -11,6 +11,7 @@ int main(int argc, char** argv){
     mactest_set_uint64();
     mactest_set_string();
     mactest_set_octets();
+    mactest_set_octet();
     mactest_get_string();
 
     return EXIT_SUCCESS;

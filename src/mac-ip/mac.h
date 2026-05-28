@@ -11,6 +11,7 @@ typedef enum ERREUR_MAC {
     VALEUR_OCTET,
     FORMAT_STRING,
     TAILLE_STRING,
+    INDEX_OCTET,
     OK
 } ERREUR_MAC;
 

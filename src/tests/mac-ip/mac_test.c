@@ -44,6 +44,20 @@ void mactest_set_octets(){
     mac_deinit(a);
 }
 
+void mactest_set_octet(){
+    mac* a = NULL;
+
+    assert(mac_set_octet(a, 0, 0) == POINTEUR_NULL);
+
+    a = mac_init();
+    mac_set_string(a, "01:23:45:67:89:AB");
+    assert(mac_set_octet(a, 0, -1) == INDEX_OCTET);
+    assert(mac_set_octet(a, 0, 6) == INDEX_OCTET);
+    assert(mac_set_octet(a, -1, 0) == VALEUR_OCTET);
+    assert(mac_set_octet(a, 256, 0) == VALEUR_OCTET);
+    assert(mac_set_octet(a, 5, 0) == OK);
+}
+
 void mactest_get_string(){
     mac* a = NULL;
     char str[1], str2[17];

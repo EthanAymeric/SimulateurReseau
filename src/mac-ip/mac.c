@@ -34,6 +34,10 @@ ERREUR_MAC mac_check_valeur_octet(int valeur){
     return (valeur >= 0 && valeur <= 255) ? OK : VALEUR_OCTET;
 }
 
+ERREUR_MAC mac_check_index_octet(int index){
+    return (index >= 0 && index < NB_OCTETS) ? OK : INDEX_OCTET;
+}
+
 ERREUR_MAC mac_deinit(mac* mac){
     ERREUR_MAC err;
     if ((err = mac_check_pointeur_null(mac)) != OK){
@@ -121,6 +125,26 @@ ERREUR_MAC mac_set_string(mac* mac, char* valeur){
     else if (err != OK){
         return err;
     }
+
+    return OK;
+}
+
+ERREUR_MAC mac_set_octet(mac* mac, int valeur, size_t index){
+    ERREUR_MAC err;
+    if ((err = mac_check_pointeur_null(mac)) != OK){
+        return err;
+    }
+    if ((err = mac_check_index_octet(index)) != OK){
+        return err;
+    }
+    if ((err = mac_check_valeur_octet(valeur)) != OK){
+        return err;
+    }
+
+    uint8_t offset = (NB_BITS - (OCTET * index));
+    uint8_t masque = 0xFF << offset; // on masque le n-ième octet
+    mac->adresse &= ~masque; // on met cet octet à 0: adresse = adresse ET NOT(masque)
+    mac->adresse |= valeur << offset; // on remplace l'octet à 0 par la nouvelle valeur: adresse OU valeur
 
     return OK;
 }
