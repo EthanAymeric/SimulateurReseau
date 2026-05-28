@@ -15,12 +15,12 @@ typedef enum ERREUR_IP {
 
 typedef struct ip ip;
 
-ip* init();
-ERREUR_IP deinit(ip* ip);
+ip* ip_init();
+ERREUR_IP ip_deinit(ip* ip);
 
-ERREUR_IP set_adresse(ip* ip, uint8_t octet1, uint8_t octet2, uint8_t octet3, uint8_t octet4);
-ERREUR_IP set_octet_adresse(ip* ip, uint8_t octet, size_t index);
-ERREUR_IP set_cidr(ip* ip , uint8_t cidr);
-ERREUR_IP get_string(ip* ip, char* str);
+ERREUR_IP ip_set_adresse(ip* ip, uint8_t octet1, uint8_t octet2, uint8_t octet3, uint8_t octet4);
+ERREUR_IP ip_set_octet_adresse(ip* ip, uint8_t octet, size_t index);
+ERREUR_IP ip_set_cidr(ip* ip , uint8_t cidr);
+ERREUR_IP ip_get_string(ip* ip, char* str);
 
 #endif 

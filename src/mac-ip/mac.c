@@ -12,24 +12,24 @@ struct mac {
     uint64_t adresse;
 };
 
-ERREUR_MAC check_pointeur_null(void* ptr){
+ERREUR_MAC mac_check_pointeur_null(void* ptr){
     return ptr == NULL ? POINTEUR_NULL : NULLE;
 }
 
-mac* init(){
+mac* mac_init(){
     mac* a = NULL;
     a = malloc(sizeof(mac));
 
     return a;
 }
 
-ERREUR_MAC check_valeur(uint64_t valeur){
+ERREUR_MAC mac_check_valeur(uint64_t valeur){
     return valeur > 0xFFFFFFFFFFFF ? VALEUR : NULLE;
 }
 
-ERREUR_MAC deinit(mac* mac){
+ERREUR_MAC mac_deinit(mac* mac){
     ERREUR_MAC err;
-    if ((err = check_pointeur_null(mac)) != NULLE){
+    if ((err = mac_check_pointeur_null(mac)) != NULLE){
         return err;
     }
 
@@ -39,13 +39,13 @@ ERREUR_MAC deinit(mac* mac){
     return NULLE;
 }
 
-ERREUR_MAC set_uint64(mac* mac, uint64_t valeur){
+ERREUR_MAC mac_set_uint64(mac* mac, uint64_t valeur){
     ERREUR_MAC err;
-    if ((err = check_pointeur_null(mac)) != NULLE){
+    if ((err = mac_check_pointeur_null(mac)) != NULLE){
         return err;
     }
 
-    if ((err = check_valeur(valeur)) != NULLE){
+    if ((err = mac_check_valeur(valeur)) != NULLE){
         return err;
     }
 
@@ -54,9 +54,9 @@ ERREUR_MAC set_uint64(mac* mac, uint64_t valeur){
     return NULLE;
 }
 
-ERREUR_MAC set_octets(mac *mac, uint8_t octet1, uint8_t octet2, uint8_t octet3, uint8_t octet4, uint8_t octet5, uint8_t octet6){
+ERREUR_MAC mac_set_octets(mac *mac, uint8_t octet1, uint8_t octet2, uint8_t octet3, uint8_t octet4, uint8_t octet5, uint8_t octet6){
     ERREUR_MAC err;
-    if ((err = check_pointeur_null(mac)) != NULLE){
+    if ((err = mac_check_pointeur_null(mac)) != NULLE){
         return err;
     }
 
@@ -67,7 +67,7 @@ ERREUR_MAC set_octets(mac *mac, uint8_t octet1, uint8_t octet2, uint8_t octet3, 
     valeur = (valeur << OCTET) + octet5;
     valeur = (valeur << OCTET) + octet6;
 
-    if ((err = check_valeur(valeur)) != NULLE){
+    if ((err = mac_check_valeur(valeur)) != NULLE){
         return err;
     }
 
@@ -76,9 +76,9 @@ ERREUR_MAC set_octets(mac *mac, uint8_t octet1, uint8_t octet2, uint8_t octet3, 
     return NULLE;
 }
 
-ERREUR_MAC set_string(mac* mac, char* valeur){
+ERREUR_MAC mac_set_string(mac* mac, char* valeur){
     ERREUR_MAC err;
-    if ((err = check_pointeur_null(mac)) != NULLE){
+    if ((err = mac_check_pointeur_null(mac)) != NULLE){
         return err;
     }
 
@@ -87,7 +87,7 @@ ERREUR_MAC set_string(mac* mac, char* valeur){
         return FORMAT_STRING;
     }
 
-    if ((err = set_octets(mac, octets[0], octets[1], octets[2], octets[3], octets[4], octets[5])) != NULLE){
+    if ((err = mac_set_octets(mac, octets[0], octets[1], octets[2], octets[3], octets[4], octets[5])) != NULLE){
         return err;
     }
 
@@ -96,9 +96,9 @@ ERREUR_MAC set_string(mac* mac, char* valeur){
     return NULLE;
 }
 
-ERREUR_MAC get_string(mac* mac, char separateur, char* str){
+ERREUR_MAC mac_get_string(mac* mac, char separateur, char* str){
     ERREUR_MAC err;
-    if ((err = check_pointeur_null(mac)) != NULLE){
+    if ((err = mac_check_pointeur_null(mac)) != NULLE){
         return err;
     }
 
