@@ -1,6 +1,7 @@
 #include "switch.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 
 
@@ -11,7 +12,7 @@ struct commutateur {
     size_t nbPorts;
 };
 
-SWITCH_ERROR check_pointeur_null(void* ptr)
+SWITCH_ERROR switch_check_pointeur_null(void* ptr)
 {
     return (ptr == NULL) ? POINTEUR_NULL : NULLE;
 }
@@ -49,17 +50,29 @@ void switch_deinit(Switch* s)
     free(s);
 }
 
-void switch_show_mac_hexa(Switch* s)
+SWITCH_ERROR switch_show_mac_hexa(Switch* s, char* str)
 {
-    printf("%lx\n",s->macAddress);
+    if (switch_check_pointeur_null(s) == POINTEUR_NULL)
+    {
+        return POINTEUR_NULL;
+    }
+    sprintf(str,"%lx\n",s->macAddress);
+    return OK;
 }
 
-void switch_show_commutation_table(Switch* s)
+SWITCH_ERROR switch_show_commutation_table(Switch* s, char* str)
 {
+    if (switch_check_pointeur_null(s) == POINTEUR_NULL)
+    {
+        return POINTEUR_NULL;
+    }
+    char buffer[255];
     for (size_t i = 0; i < s->nbPorts; i++)
     {
-        printf("Port %zu : %lx\n", i+1, s->commutationTable[i]);
+        sprintf(buffer,"Port %zu : %lx\n", i+1, s->commutationTable[i]);
+        strcat(str,buffer);
     }
+    return OK;
 }
 
 SWITCH_ERROR switch_set_priority(Switch* s, uint32_t priority)
