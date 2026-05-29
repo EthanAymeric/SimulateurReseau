@@ -17,6 +17,5 @@ ERREUR_CODE station_get_string(station* station, char* str, size_t taille_str);
 ERREUR_CODE station_set_ip_mac(station* station, ip* ip, mac* mac);
 ERREUR_CODE station_set_ip(station* station, ip* ip);
 ERREUR_CODE station_set_mac(station* station, mac* mac);
-// ERREUR_CODE station_ajoute_relation_switch(station* st, switch* sw);
 
 #endif

@@ -57,7 +57,4 @@ Une adresse MAC est représentée par un `uint64_t` (entier sur 64 bits). Celle-
 
 - [x] Modifier type de retour pour l'énumération `ERREUR` générique 
 - [x] Inclure `ip.h` et `mac.h` et résoudre les conflits 
-- [ ] Inclure structure switch et résoudre les conflits 
-- [ ] Relire le code 
 - [ ] Ecrire des tests 
-- [ ] Ajouter l'implémentation de `station_ajoute_relation_switch` 
