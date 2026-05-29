@@ -7,7 +7,7 @@
 
 
 struct commutateur {
-    uint64_t* commutationTable; 
+    mac** commutationTable; 
     mac* macAddress;
     uint32_t prio;
     size_t nbPorts;
@@ -23,16 +23,17 @@ Switch* switch_init() {
     s->macAddress = mac_init();
     s->nbPorts = 8;
     s->prio = 32768;
-    s->commutationTable = malloc(sizeof(uint64_t) * s->nbPorts);
+    s->commutationTable = malloc(sizeof(mac*) * s->nbPorts);
     for (size_t i = 0; i < s->nbPorts ; i++)
     {
-        s->commutationTable[i] = 0;
+        s->commutationTable[i] = mac_init();
+        mac_set_octets(s->commutationTable[i], 0, 0, 0, 0, 0, 0);
     }
    
     return s;
 }
 
-Switch* switch_init_with_parameter(uint64_t mac, size_t nbPorts, uint32_t priority)
+Switch* switch_init_with_parameter(mac* mac, size_t nbPorts, uint32_t priority)
 {
     Switch* s = malloc(sizeof(Switch));
     s->macAddress = mac;
@@ -48,18 +49,27 @@ Switch* switch_init_with_parameter(uint64_t mac, size_t nbPorts, uint32_t priori
 
 void switch_deinit(Switch* s)
 {
+    for (size_t i = 0; i < s->nbPorts; i++){
+        mac_deinit(s->commutationTable[i]);
+    }
+
     free(s->commutationTable);
+    s->commutationTable = NULL;
+
+    mac_deinit(s->macAddress);
+
     free(s);
+    s = NULL;
 }
 
 ERREUR_CODE switch_show_mac_hexa(Switch* s, char* str)
 {
-    if (switch_check_pointeur_null(s) == POINTEUR_NULL)
-    {
-        return POINTEUR_NULL;
+    ERREUR_CODE err;
+    if ((err = switch_check_pointeur_null(s)) != OK ||
+        (err = mac_get_string(s->macAddress,':',str,19)) != OK){
+        return err;
     }
 
-    mac_get_string(s->macAddress,':',str,19);
     return OK;
 }
 
@@ -70,9 +80,11 @@ ERREUR_CODE switch_show_commutation_table(Switch* s, char* str)
         return POINTEUR_NULL;
     }
     char buffer[255];
+    char adresse[40];
     for (size_t i = 0; i < s->nbPorts; i++)
     {
-        sprintf(buffer,"Port %zu : %lx\n", i+1, s->commutationTable[i]);
+        mac_get_string(s->commutationTable[i], ':', adresse, 40);
+        sprintf(buffer,"Port %zu : %s\n", i+1, adresse);
         strcat(str,buffer);
     }
     return OK;
@@ -88,12 +100,13 @@ ERREUR_CODE switch_set_priority(Switch* s, uint32_t priority)
     return INVALID_ARGUMENT;
 }
 
-ERREUR_CODE switch_set_commutation_table(Switch* s, size_t port, uint64_t macAddress)
+ERREUR_CODE switch_set_commutation_table(Switch* s, size_t port, mac* macAddress)
 {
     if (port >= s->nbPorts)
     {
         return INVALID_ARGUMENT;
     }
+
     s->commutationTable[port] = macAddress;
     return OK;
 }
