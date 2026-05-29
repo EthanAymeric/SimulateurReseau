@@ -8,7 +8,7 @@ struct ip {
     uint8_t cidr;
 };
 
-ERREUR_IP ip_check_pointeur_null(void* ptr){
+ERREUR_CODE ip_check_pointeur_null(void* ptr){
     return ptr == NULL ? POINTEUR_NULL : OK;
 }
 
@@ -19,24 +19,24 @@ ip* ip_init(){
     return a;
 }
 
-ERREUR_IP ip_check_index_octet(size_t index){
+ERREUR_CODE ip_check_index_octet(size_t index){
     // index > 0 toujours vrai
     return index < 4 ? OK : INDEX_OCTET;
 }
 
-ERREUR_IP ip_check_cidr(uint8_t cidr){
+ERREUR_CODE ip_check_cidr(uint8_t cidr){
     // cidr > 0 toujours vrai
     return cidr <= 32 ? OK : VALEUR_CIDR;
 }
 
-ERREUR_IP ip_check_valeur_octet(int octet){
+ERREUR_CODE ip_check_valeur_octet(int octet){
     // utilisation de int car 0 <= octet <= 255 et que pour uint8_t octet = -1 ; octet == 255 
     // On évite ainsi l'absence d'erreur pour octet = -1
     return (octet >= 0 && octet < 256) ? OK : VALEUR_OCTET;
 }
 
-ERREUR_IP ip_deinit(ip* ip){
-    ERREUR_IP err;
+ERREUR_CODE ip_deinit(ip* ip){
+    ERREUR_CODE err;
     if ((err = ip_check_pointeur_null(ip)) != OK){
         return err;
     }
@@ -47,8 +47,8 @@ ERREUR_IP ip_deinit(ip* ip){
     return OK;
 }
 
-ERREUR_IP ip_get_string(ip* ip, char* str, size_t taille_str){
-    ERREUR_IP err;
+ERREUR_CODE ip_get_string(ip* ip, char* str, size_t taille_str){
+    ERREUR_CODE err;
     if ((err = ip_check_pointeur_null(ip)) != OK){
         return err;
     }
@@ -63,8 +63,8 @@ ERREUR_IP ip_get_string(ip* ip, char* str, size_t taille_str){
     return OK;
 }
 
-ERREUR_IP ip_set_adresse(ip* ip, int octet1, int octet2, int octet3, int octet4){
-    ERREUR_IP err;
+ERREUR_CODE ip_set_adresse(ip* ip, int octet1, int octet2, int octet3, int octet4){
+    ERREUR_CODE err;
     if ((err = ip_check_pointeur_null(ip)) != OK ||
         (err = ip_check_valeur_octet(octet1)) != OK || 
         (err = ip_check_valeur_octet(octet2)) != OK || 
@@ -81,8 +81,8 @@ ERREUR_IP ip_set_adresse(ip* ip, int octet1, int octet2, int octet3, int octet4)
     return OK;
 }
 
-ERREUR_IP ip_set_octet_adresse(ip* ip, int octet, size_t index){
-    ERREUR_IP err;
+ERREUR_CODE ip_set_octet_adresse(ip* ip, int octet, size_t index){
+    ERREUR_CODE err;
     if ((err = ip_check_pointeur_null(ip)) != OK ||
         (err = ip_check_index_octet(index)) != OK ||
         (err = ip_check_valeur_octet(octet)) != OK){
@@ -94,8 +94,8 @@ ERREUR_IP ip_set_octet_adresse(ip* ip, int octet, size_t index){
     return OK;
 }
 
-ERREUR_IP ip_set_cidr(ip* ip , uint8_t cidr){
-    ERREUR_IP err;
+ERREUR_CODE ip_set_cidr(ip* ip , uint8_t cidr){
+    ERREUR_CODE err;
     if ((err = ip_check_pointeur_null(ip)) != OK ||
         (err = ip_check_cidr(cidr)) != OK){
         return err;

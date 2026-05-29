@@ -15,7 +15,7 @@ struct mac {
     uint64_t adresse;
 };
 
-ERREUR_MAC mac_check_pointeur_null(void* ptr){
+ERREUR_CODE mac_check_pointeur_null(void* ptr){
     return ptr == NULL ? POINTEUR_NULL : OK;
 }
 
@@ -26,20 +26,20 @@ mac* mac_init(){
     return a;
 }
 
-ERREUR_MAC mac_check_valeur(uint64_t valeur){
+ERREUR_CODE mac_check_valeur(uint64_t valeur){
     return valeur < 0xFFFFFFFFFFFF ? OK : VALEUR;
 }
 
-ERREUR_MAC mac_check_valeur_octet(int valeur){
+ERREUR_CODE mac_check_valeur_octet(int valeur){
     return (valeur >= 0 && valeur <= 255) ? OK : VALEUR_OCTET;
 }
 
-ERREUR_MAC mac_check_index_octet(int index){
+ERREUR_CODE mac_check_index_octet(int index){
     return (index >= 0 && index < NB_OCTETS) ? OK : INDEX_OCTET;
 }
 
-ERREUR_MAC mac_deinit(mac* mac){
-    ERREUR_MAC err;
+ERREUR_CODE mac_deinit(mac* mac){
+    ERREUR_CODE err;
     if ((err = mac_check_pointeur_null(mac)) != OK){
         return err;
     }
@@ -50,8 +50,8 @@ ERREUR_MAC mac_deinit(mac* mac){
     return OK;
 }
 
-ERREUR_MAC mac_set_uint64(mac* mac, uint64_t valeur){
-    ERREUR_MAC err;
+ERREUR_CODE mac_set_uint64(mac* mac, uint64_t valeur){
+    ERREUR_CODE err;
     if ((err = mac_check_pointeur_null(mac)) != OK ||
         (err = mac_check_valeur(valeur)) != OK){
         return err;
@@ -62,8 +62,8 @@ ERREUR_MAC mac_set_uint64(mac* mac, uint64_t valeur){
     return OK;
 }
 
-ERREUR_MAC mac_set_octets(mac* mac, int octet1, int octet2, int octet3, int octet4, int octet5, int octet6){
-    ERREUR_MAC err;
+ERREUR_CODE mac_set_octets(mac* mac, int octet1, int octet2, int octet3, int octet4, int octet5, int octet6){
+    ERREUR_CODE err;
     if ((err = mac_check_pointeur_null(mac)) != OK ||
         (err = mac_check_valeur_octet(octet1)) != OK ||
         (err = mac_check_valeur_octet(octet2)) != OK ||
@@ -90,8 +90,8 @@ ERREUR_MAC mac_set_octets(mac* mac, int octet1, int octet2, int octet3, int octe
     return OK;
 }
 
-ERREUR_MAC mac_set_string(mac* mac, char* valeur){
-    ERREUR_MAC err;
+ERREUR_CODE mac_set_string(mac* mac, char* valeur){
+    ERREUR_CODE err;
     if ((err = mac_check_pointeur_null(mac)) != OK){
         return err;
     }
@@ -123,8 +123,8 @@ ERREUR_MAC mac_set_string(mac* mac, char* valeur){
     return OK;
 }
 
-ERREUR_MAC mac_set_octet(mac* mac, int valeur, size_t index){
-    ERREUR_MAC err;
+ERREUR_CODE mac_set_octet(mac* mac, int valeur, size_t index){
+    ERREUR_CODE err;
     if ((err = mac_check_pointeur_null(mac)) != OK ||
         (err = mac_check_index_octet(index)) != OK ||
         (err = mac_check_valeur_octet(valeur)) != OK){ 
@@ -139,8 +139,8 @@ ERREUR_MAC mac_set_octet(mac* mac, int valeur, size_t index){
     return OK;
 }
 
-ERREUR_MAC mac_get_string(mac* mac, char separateur, char* str, size_t taille_str){
-    ERREUR_MAC err;
+ERREUR_CODE mac_get_string(mac* mac, char separateur, char* str, size_t taille_str){
+    ERREUR_CODE err;
     if ((err = mac_check_pointeur_null(mac)) != OK){
         return err;
     }

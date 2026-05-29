@@ -1,4 +1,5 @@
 #include "switch.h"
+#include "../mac-ip/mac.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -7,18 +8,19 @@
 
 struct commutateur {
     uint64_t* commutationTable; 
-    uint64_t macAddress;
+    mac* macAddress;
     uint32_t prio;
     size_t nbPorts;
 };
 
-SWITCH_ERROR switch_check_pointeur_null(void* ptr)
+ERREUR_CODE switch_check_pointeur_null(void* ptr)
 {
-    return (ptr == NULL) ? POINTEUR_NULL : NULLE;
+    return (ptr == NULL) ? POINTEUR_NULL : OK;
 }
 
 Switch* switch_init() {
     Switch* s = malloc(sizeof(Switch));
+    s->macAddress = mac_init();
     s->nbPorts = 8;
     s->prio = 32768;
     s->commutationTable = malloc(sizeof(uint64_t) * s->nbPorts);
@@ -50,17 +52,18 @@ void switch_deinit(Switch* s)
     free(s);
 }
 
-SWITCH_ERROR switch_show_mac_hexa(Switch* s, char* str)
+ERREUR_CODE switch_show_mac_hexa(Switch* s, char* str)
 {
     if (switch_check_pointeur_null(s) == POINTEUR_NULL)
     {
         return POINTEUR_NULL;
     }
-    sprintf(str,"%lx\n",s->macAddress);
+
+    mac_get_string(s->macAddress,':',str,19);
     return OK;
 }
 
-SWITCH_ERROR switch_show_commutation_table(Switch* s, char* str)
+ERREUR_CODE switch_show_commutation_table(Switch* s, char* str)
 {
     if (switch_check_pointeur_null(s) == POINTEUR_NULL)
     {
@@ -75,7 +78,7 @@ SWITCH_ERROR switch_show_commutation_table(Switch* s, char* str)
     return OK;
 }
 
-SWITCH_ERROR switch_set_priority(Switch* s, uint32_t priority)
+ERREUR_CODE switch_set_priority(Switch* s, uint32_t priority)
 {
     if (priority%4096 == 0)
     {
@@ -85,7 +88,7 @@ SWITCH_ERROR switch_set_priority(Switch* s, uint32_t priority)
     return INVALID_ARGUMENT;
 }
 
-SWITCH_ERROR switch_set_commutation_table(Switch* s, size_t port, uint64_t macAddress)
+ERREUR_CODE switch_set_commutation_table(Switch* s, size_t port, uint64_t macAddress)
 {
     if (port >= s->nbPorts)
     {
