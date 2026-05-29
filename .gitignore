@@ -1,3 +1,4 @@
-vgcore.*
+
 src/build
 src/bin
+src/vgcore*
