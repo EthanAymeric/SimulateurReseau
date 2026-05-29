@@ -1,5 +1,6 @@
 #include "mac-ip/ip_test.h"
 #include "mac-ip/mac_test.h"
+#include "station/station_test.h"
 #include <stdlib.h>
 
 int main(int argc, char** argv){
@@ -13,6 +14,11 @@ int main(int argc, char** argv){
     mactest_set_octets();
     mactest_set_octet();
     mactest_get_string();
+
+    stationtest_get_string();
+    stationtest_set_ip_mac();
+    stationtest_set_ip();
+    stationtest_set_mac();
 
     return EXIT_SUCCESS;
 }
