@@ -52,3 +52,12 @@ Chaque octet de l'adresse et le masque sont représentés sous forme de byte/uin
 Une adresse MAC est représentée par un `uint64_t` (entier sur 64 bits). Celle-ci faisant uniquement 48 bits, seuls les 48 bits de poids faible sont utilisés. 
 
 **C'est à l'appelant de MAC de vérifier que l'allocation lors de `init` est réussie.** 
+
+# To-Do 
+
+- [ ] Modifier type de retour pour l'énumération `ERREUR` générique 
+- [ ] Inclure `ip.h` et `mac.h` et résoudre les conflits 
+- [ ] Inclure structure switch et résoudre les conflits 
+- [ ] Relire le code 
+- [ ] Ecrire des tests 
+- [ ] Ajouter l'implémentation de `station_ajoute_relation_switch` 
