@@ -10,13 +10,13 @@
 
 typedef struct station station;
 
-station* init();
-ERREUR_CODE deinit(station* station);
+station* station_init();
+ERREUR_CODE station_deinit(station* station);
 
-ERREUR_CODE get_string(station* station, char* str);
-ERREUR_CODE set_station(station* station, ip ip, mac mac);
-ERREUR_CODE station_ajoute_relation_station(station* st1, station* st2);
-ERREUR_CODE station_suppr_relation(station* st1, station* st2);
+ERREUR_CODE station_get_string(station* station, char* str, size_t taille_str);
+ERREUR_CODE station_set_ip_mac(station* station, ip* ip, mac* mac);
+ERREUR_CODE station_set_ip(station* station, ip* ip);
+ERREUR_CODE station_set_mac(station* station, mac* mac);
 // ERREUR_CODE station_ajoute_relation_switch(station* st, switch* sw);
 
 #endif
