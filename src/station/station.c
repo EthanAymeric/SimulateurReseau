@@ -17,14 +17,20 @@ ERREUR_CODE station_check_pointeur_null(void* ptr){
 station* station_init(){
     station* a = NULL;
     a = malloc(sizeof(station));
+    a->ip = ip_init();
+    a->mac = mac_init();
 
     return a;
 }
 
 ERREUR_CODE station_deinit(station* station){
-    if (check_pointeur_null(station) == POINTEUR_NULL){
-        return POINTEUR_NULL;
+    ERREUR_CODE err;
+    if ((err = station_check_pointeur_null(station)) != OK){
+        return err;
     }
+
+    ip_deinit(station->ip);
+    mac_deinit(station->mac);
 
     free(station);
     station = NULL;
