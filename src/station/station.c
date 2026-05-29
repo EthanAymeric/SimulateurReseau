@@ -1,18 +1,16 @@
 #include "station.h"
-#include "ip.c"
-#include "mac.c"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 struct station {
-    ip ip;
-    mac mac;
+    ip* ip;
+    mac* mac;
     // Première case pour l'entrée, Deuxième case pour la sortie...?
     char interface[2];
 };
 
-ERREUR_STATION station_check_pointeur_null(void* ptr){
+ERREUR_CODE station_check_pointeur_null(void* ptr){
     return ptr == NULL ? POINTEUR_NULL : OK;
 }
 
@@ -23,7 +21,7 @@ station* station_init(){
     return a;
 }
 
-ERREUR_STATION station_deinit(station* station){
+ERREUR_CODE station_deinit(station* station){
     if (check_pointeur_null(station) == POINTEUR_NULL){
         return POINTEUR_NULL;
     }
@@ -34,7 +32,7 @@ ERREUR_STATION station_deinit(station* station){
     return OK;
 }
 
-ERREUR_STATION station_get_string(station* station, char* str){
+ERREUR_CODE station_get_string(station* station, char* str){
     if (check_pointeur_null(station) == POINTEUR_NULL){
         return POINTEUR_NULL;
     }
@@ -44,7 +42,7 @@ ERREUR_STATION station_get_string(station* station, char* str){
     return OK;
 }
 
-ERREUR_STATION station_set_station(station* station, ip ip, mac mac){
+ERREUR_CODE station_set_station(station* station, ip ip, mac mac){
     if (check_pointeur_null(station) == POINTEUR_NULL){
         return POINTEUR_NULL;
     }
@@ -59,7 +57,7 @@ ERREUR_STATION station_set_station(station* station, ip ip, mac mac){
     return OK;
 }
 
-ERREUR_STATION station_ajoute_relation(station* st1, station* st2){
+ERREUR_CODE station_ajoute_relation(station* st1, station* st2){
     /*
     Fonction qui permet de relier deux stations entre elles (pas du tout sûr so c'est la bonne manière de s'y prendre)
     Corriger si besoin svp (ça vaut pour tous mes fichiers comme le dit le READ.me lol)
@@ -74,7 +72,7 @@ ERREUR_STATION station_ajoute_relation(station* st1, station* st2){
     return OK;
 }
 
-ERREUR_STATION station_suppr_relation_station(station* st1, station* st2){
+ERREUR_CODE station_suppr_relation_station(station* st1, station* st2){
     /*
     Fonction qui permet de suppprimer une relation entre 2 stations
     Corriger si besoin svp (ça vaut pour tous mes fichiers comme le dit le READ.me lol)
@@ -103,7 +101,7 @@ ERREUR_STATION station_suppr_relation_station(station* st1, station* st2){
     return OK;
 }
 
-ERREUR_STATION station_ajoute_relation_switch(station* st, switch* sw){
+ERREUR_CODE station_ajoute_relation_switch(station* st, switch* sw){
     /*
     Fonction qui permet de relier une station à un switch
     Il faudrait donc que la table de commutation du switch soit mis à jour : comment faire ?!
