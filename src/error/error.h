@@ -1,0 +1,18 @@
+#ifndef ERROR_H
+#define ERROR_H
+
+
+typedef enum ERREUR_CODE {
+    ALLOCATION,
+    POINTEUR_NULL,
+    VALEUR,
+    VALEUR_OCTET,
+    FORMAT_STRING,
+    TAILLE_STRING,
+    INDEX_OCTET,
+    INVALID_ARGUMENT,
+    VALEUR_CIDR,
+    OK
+} ERREUR_CODE;
+
+#endif

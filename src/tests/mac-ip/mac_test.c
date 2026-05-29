@@ -29,6 +29,8 @@ void mactest_set_string(){
     assert(mac_set_string(a, "01:23:45:67:89:AB:CD") == FORMAT_STRING);
     assert(mac_set_string(a, "01:23:45:67:89:AB") == OK);
     assert(mac_set_string(a, "01-23-45-67-89-AB") == OK);
+
+    mac_deinit(a);
 }
 
 void mactest_set_octets(){
@@ -56,6 +58,8 @@ void mactest_set_octet(){
     assert(mac_set_octet(a, -1, 0) == VALEUR_OCTET);
     assert(mac_set_octet(a, 256, 0) == VALEUR_OCTET);
     assert(mac_set_octet(a, 5, 0) == OK);
+
+    mac_deinit(a);
 }
 
 void mactest_get_string(){
@@ -69,4 +73,6 @@ void mactest_get_string(){
     assert(mac_get_string(a, ':', str, 1) == TAILLE_STRING);
     assert(mac_get_string(a, ':', str2, 40) == OK);
     assert(strcmp(str2, "01:23:45:67:89:AB") == 0);
+
+    mac_deinit(a);
 }
