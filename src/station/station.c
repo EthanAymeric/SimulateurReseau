@@ -12,11 +12,11 @@ ERREUR_CODE station_check_pointeur_null(void* ptr){
     return ptr == NULL ? POINTEUR_NULL : OK;
 }
 
-station* station_init(){
+station* station_init(ip* ip, mac* mac){
     station* a = NULL;
     a = malloc(sizeof(station));
-    a->ip = ip_init();
-    a->mac = mac_init();
+    a->ip = ip;
+    a->mac = mac;
 
     return a;
 }

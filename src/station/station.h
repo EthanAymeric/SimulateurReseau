@@ -10,7 +10,7 @@
 
 typedef struct station station;
 
-station* station_init();
+station* station_init(ip* ip, mac* mac);
 ERREUR_CODE station_deinit(station* station);
 
 ERREUR_CODE station_get_string(station* station, char* str, size_t taille_str);

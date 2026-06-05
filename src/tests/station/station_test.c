@@ -13,8 +13,10 @@ void stationtest_set_ip(){
     assert(station_set_ip(s, a) == POINTEUR_NULL);
     assert(station_set_ip(s, NULL) == POINTEUR_NULL);
 
-    s = station_init();
+    s = station_init(a, mac_init());
     assert(station_set_ip(s, a) == OK);
+
+    station_deinit(s);
 }
 
 void stationtest_set_mac(){
@@ -25,8 +27,10 @@ void stationtest_set_mac(){
     assert(station_set_mac(s, a) == POINTEUR_NULL);
     assert(station_set_mac(s, NULL) == POINTEUR_NULL);
 
-    s = station_init();
+    s = station_init(ip_init(), a);
     assert(station_set_mac(s, a) == OK);
+
+    station_deinit(s);
 }
 
 void stationtest_set_ip_mac(){
@@ -36,12 +40,14 @@ void stationtest_set_ip_mac(){
 
     assert(station_set_ip_mac(s, a, b) == POINTEUR_NULL);
 
-    s = station_init();
+    s = station_init(a, b);
     assert(station_set_ip_mac(s, NULL, NULL) == POINTEUR_NULL);
     assert(station_set_ip_mac(s, NULL, b) == POINTEUR_NULL);
     assert(station_set_ip_mac(s, a, NULL) == POINTEUR_NULL);
 
     assert(station_set_ip_mac(s, a, b) == OK);
+
+    station_deinit(s);
 }
 
 void stationtest_get_string(){
@@ -57,10 +63,12 @@ void stationtest_get_string(){
 
     assert(station_get_string(s, str, 1) == POINTEUR_NULL);
 
-    s = station_init();
+    s = station_init(a, b);
     assert(station_get_string(s, str, 1) == TAILLE_STRING);
 
     station_set_ip_mac(s, a, b);
     assert(station_get_string(s, str2, 40) == OK);
     assert(strcmp(str2, "01:23:45:67:89:AB\t192.168.1.0/24") == 0);
+
+    station_deinit(s);
 }
