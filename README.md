@@ -55,7 +55,7 @@ Une adresse MAC est représentée par un `uint64_t` (entier sur 64 bits). Celle-
 
 # To-Do 
 
-- [ ] Ajouter tests pour `switch` 
+- [x] Ajouter tests pour `switch` 
 - [ ] Ajouter structure `reseauLocal` (branche `feature-Lan`)
 - [ ] Ajouter 'parseur' pour lire et décoder les fichiers de configuration 
 - [ ] Ajouter explications des structures dans le `README.md` à la manière de `IP` et `MAC` (même en mieux) pour faciliter les soutenances
