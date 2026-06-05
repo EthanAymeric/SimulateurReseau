@@ -60,18 +60,18 @@ void switch_deinit(Switch* s)
     s = NULL;
 }
 
-ERREUR_CODE switch_show_mac_hexa(Switch* s, char* str)
+ERREUR_CODE switch_show_mac_hexa(Switch* s, char* str, size_t taille_str)
 {
     ERREUR_CODE err;
     if ((err = switch_check_pointeur_null(s)) != OK ||
-        (err = mac_get_string(s->macAddress,':',str,19)) != OK){
+        (err = mac_get_string(s->macAddress,':', str, taille_str)) != OK){
         return err;
     }
 
     return OK;
 }
 
-ERREUR_CODE switch_show_commutation_table(Switch* s, char* str)
+ERREUR_CODE switch_show_commutation_table(Switch* s, char* str, size_t taille_str)
 {
     if (switch_check_pointeur_null(s) == POINTEUR_NULL)
     {
@@ -79,12 +79,19 @@ ERREUR_CODE switch_show_commutation_table(Switch* s, char* str)
     }
     char buffer[255];
     char adresse[40];
+    size_t nbCharEcris = 0;
     for (size_t i = 0; i < s->nbPorts; i++)
     {
         mac_get_string(s->commutationTable[i], ':', adresse, 40);
-        sprintf(buffer,"Port %zu : %s\n", i+1, adresse);
+        nbCharEcris += snprintf(buffer, taille_str, "Port %zu : %s\n", i+1, adresse);
+
+        if (nbCharEcris >= taille_str){
+            return TAILLE_STRING;
+        }
+
         strcat(str,buffer);
     }
+
     return OK;
 }
 
