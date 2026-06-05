@@ -1,16 +1,19 @@
+#include "mac-ip/mac.h"
 #include "switch/switch.h"
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
 
 int main() {
-
-    Switch* s = switch_init_with_parameter(255771439995918, 8, 4096);
-    switch_set_commutation_table(s,5,255766639995918);
+    mac* mac = mac_init();
+    mac_set_uint64(mac, 255766639995918);
+    Switch* s = switch_init_with_parameter(mac, 8, 4096);
+    switch_set_commutation_table(s, 5, mac);
     char* str = malloc(sizeof(char) * 255);
     switch_show_commutation_table(s,str);
     printf("%s\n", str);
+
+    mac_deinit(mac);
     switch_deinit(s);
     free(str);
 }
