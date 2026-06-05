@@ -4,8 +4,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-
-
 struct commutateur {
     mac** commutationTable; 
     mac* macAddress;

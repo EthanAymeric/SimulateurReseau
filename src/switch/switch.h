@@ -16,8 +16,4 @@ ERREUR_CODE switch_show_commutation_table(Switch* s, char* str);
 ERREUR_CODE switch_set_priority(Switch* s, uint32_t prio);
 ERREUR_CODE switch_set_commutation_table(Switch* s, size_t port, mac* macAddress);
 
-
-
-
-
 #endif
