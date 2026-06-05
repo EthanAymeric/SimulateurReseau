@@ -90,7 +90,7 @@ ERREUR_CODE switch_show_commutation_table(Switch* s, char* str)
 
 ERREUR_CODE switch_set_priority(Switch* s, uint32_t priority)
 {
-    if (priority%4096 == 0)
+    if (priority%4096 == 0) // d'après la doc
     {
         s->prio = priority;
         return OK;
