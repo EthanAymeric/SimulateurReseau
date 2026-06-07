@@ -2,6 +2,7 @@
 #include "mac-ip/mac_test.h"
 #include "station/station_test.h"
 #include "appareil/appareil_test.h"
+#include "trame/trame_test.h"
 #include "lan/lan_test.h"
 #include <stdlib.h>
 
@@ -30,6 +31,9 @@ int main(int argc, char** argv){
 
     lantest_nombre_machine();
     lantest_nombre_connexion();
+
+    print_trame_test();
+    print_trame_hex_test();
 
     return EXIT_SUCCESS;
 }
