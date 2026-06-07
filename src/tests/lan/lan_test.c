@@ -1,6 +1,5 @@
 #include "lan_test.h"
 #include "../../lan/lan.h"
-#include "../../switch/switch.h"
 #include <assert.h>
 #include <stdlib.h>
 

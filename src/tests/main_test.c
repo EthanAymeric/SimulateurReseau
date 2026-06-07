@@ -30,5 +30,6 @@ int main(int argc, char** argv){
 
     lantest_nombre_machine();
     lantest_nombre_connexion();
+
     return EXIT_SUCCESS;
 }

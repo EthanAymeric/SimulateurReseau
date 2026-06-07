@@ -5,21 +5,16 @@
 #include <stdlib.h>
 #include <string.h>
 
-union Equipements {
-    Switch* sw;
-    station* st;
+struct Lien{
+    appareil* inter1;
+    appareil* inter2;
+    
 };
 
-typedef struct Lien{
-    union Equipements inter1;
-    union Equipements inter2;
-    
-} Lien;
-
 typedef struct Reseau {
-    union Equipements* machine;
-    Lien* connexion;
-    size_t nbConnexion;
+    appareil** machines;
+    Lien* connexions;
+    size_t nbConnexions;
     size_t nbMachines;
 } Reseau;
 
@@ -28,38 +23,38 @@ ERREUR_CODE lan_check_pointeur_null(void* ptr)
     return (ptr == NULL) ? POINTEUR_NULL : OK;
 }
 
-Reseau* lan_init(size_t nbMachines, size_t nbConnexion)
+Reseau* lan_init(size_t nbMachines, size_t nbConnexions)
 {
     Reseau* r = malloc(sizeof(Reseau));
-    if (r == NULL)
-    {
-        return NULL;
-    }
+    if (r == NULL) return NULL;
+
     r->nbMachines = nbMachines;
-    r->nbConnexion = nbConnexion;
-    r->machine = malloc(sizeof(union Equipements)*nbMachines);
-    if (r->machine == NULL)
+    r->nbConnexions = nbConnexions;
+    r->machines = malloc(sizeof(appareil*) * nbMachines);
+    if (r->machines == NULL)
     {
         free(r);
         return NULL;
     }
-    r->connexion = malloc(sizeof(Lien)*nbConnexion);
-    if (r->connexion == NULL)
+
+    r->connexions = malloc(sizeof(Lien) * nbConnexions);
+    if (r->connexions == NULL)
     {
-        free(r->machine);
+        free(r->machines);
         free(r);
         return NULL;
     }
     return r;
 }
 
-void lan_deinit(Reseau* lan)
+ERREUR_CODE lan_deinit(Reseau* lan)
 {
-
-    free(lan->machine);
-    free(lan->connexion);
+    free(lan->machines);
+    free(lan->connexions);
     
     free(lan);
+
+    return OK;
 }
 
 size_t lan_nombre_machine(Reseau* lan)
@@ -69,10 +64,10 @@ size_t lan_nombre_machine(Reseau* lan)
 
 size_t lan_nombre_connexion(Reseau* lan)
 {
-    return lan->nbConnexion;
+    return lan->nbConnexions;
 }
 
-size_t lan_get_machine_adjacente(Reseau* lan, union Equipements* machines_adjacentes, union Equipements machine)
+size_t lan_get_machines_adjacentes(Reseau* lan, appareil** machines_adjacentes, appareil* machine)
 {
     size_t temp = 0;
     //for (size_t i = 0; i < lan_nombre_connexion(lan); i++)
@@ -92,21 +87,21 @@ size_t lan_get_machine_adjacente(Reseau* lan, union Equipements* machines_adjace
     return temp;
 }
 
-ERREUR_CODE lan_ajout_machine(Reseau* lan, union Equipements machine)
+ERREUR_CODE lan_ajout_machine(Reseau* lan, appareil* machine)
 {
     if (lan_check_pointeur_null(lan) == POINTEUR_NULL)
     {
         return POINTEUR_NULL;
     }
 
-    lan->machine = realloc(lan->machine, sizeof(union Equipements) * lan->nbMachines+1);
+    lan->machines = realloc(lan->machines, sizeof(appareil*) * lan->nbMachines+1);
     
-    if (lan_check_pointeur_null(lan->machine) == POINTEUR_NULL)
+    if (lan_check_pointeur_null(lan->machines) == POINTEUR_NULL)
     {
         return POINTEUR_NULL;
     }
 
-    lan->machine[lan_nombre_machine(lan)] = machine;
+    lan->machines[lan_nombre_machine(lan)] = machine;
     lan->nbMachines++;
     return OK;
 }
@@ -117,14 +112,14 @@ ERREUR_CODE lan_ajout_connexion(Reseau* lan, Lien lien)
     {
         return POINTEUR_NULL;
     }
-    lan->connexion = realloc(lan->connexion, sizeof(Lien) * lan->nbConnexion+1);
+    lan->connexions = realloc(lan->connexions, sizeof(Lien) * lan->nbConnexions + 1);
     
-    if (lan_check_pointeur_null(lan->connexion) == POINTEUR_NULL)
+    if (lan_check_pointeur_null(lan->connexions) == POINTEUR_NULL)
     {
         return POINTEUR_NULL;
     }
 
-    lan->connexion[lan_nombre_connexion(lan)] = lien;
-    lan->nbConnexion++;
+    lan->connexions[lan_nombre_connexion(lan)] = lien;
+    lan->nbConnexions++;
     return OK;
 }
