@@ -49,8 +49,9 @@ Reseau* lan_init(size_t nbMachines, size_t nbConnexions)
 
 ERREUR_CODE lan_deinit(Reseau** lan)
 {
-    if (lan_check_pointeur_null(*lan) != OK){
-        return POINTEUR_NULL;
+    ERREUR_CODE err;
+    if ((err = lan_check_pointeur_null(*lan)) != OK){
+        return err;
     }
 
     free((*lan)->machines);
@@ -62,14 +63,28 @@ ERREUR_CODE lan_deinit(Reseau** lan)
     return OK;
 }
 
-size_t lan_nombre_machine(Reseau* lan)
+ERREUR_CODE lan_nombre_machine(Reseau* lan, size_t* nbMachines)
 {
-    return lan->nbMachines;
+    ERREUR_CODE err;
+    if ((err = lan_check_pointeur_null(lan)) != OK){
+        return err;
+    }
+
+    *nbMachines = lan->nbMachines;
+
+    return OK;
 }
 
-size_t lan_nombre_connexion(Reseau* lan)
+ERREUR_CODE lan_nombre_connexion(Reseau* lan, size_t *nbConnexions)
 {
-    return lan->nbConnexions;
+    ERREUR_CODE err;
+    if ((err = lan_check_pointeur_null(lan)) != OK){
+        return err;
+    }
+
+    *nbConnexions = lan->nbConnexions;
+
+    return OK;
 }
 
 size_t lan_get_machines_adjacentes(Reseau* lan, appareil** machines_adjacentes, appareil* machine)
@@ -106,7 +121,7 @@ ERREUR_CODE lan_ajout_machine(Reseau* lan, appareil* machine)
         return POINTEUR_NULL;
     }
 
-    lan->machines[lan_nombre_machine(lan)] = machine;
+    lan->machines[lan->nbMachines] = machine;
     lan->nbMachines++;
     return OK;
 }
@@ -124,7 +139,7 @@ ERREUR_CODE lan_ajout_connexion(Reseau* lan, Lien lien)
         return POINTEUR_NULL;
     }
 
-    lan->connexions[lan_nombre_connexion(lan)] = lien;
+    lan->connexions[lan->nbConnexions] = lien;
     lan->nbConnexions++;
     return OK;
 }

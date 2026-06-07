@@ -11,8 +11,8 @@ typedef struct Reseau Reseau;
 
 Reseau* lan_init(size_t nbMachines, size_t nbConnexion);
 ERREUR_CODE lan_deinit(Reseau** lan);
-size_t lan_nombre_machine(Reseau* lan);
-size_t lan_nombre_connexion(Reseau* lan);
+ERREUR_CODE lan_nombre_machine(Reseau* lan, size_t* nbMachines);
+ERREUR_CODE lan_nombre_connexion(Reseau* lan, size_t *nbConnexions);
 
 size_t lan_get_machines_adjacentes(Reseau* lan, appareil** machines_adjacentes, appareil* machine);
 ERREUR_CODE lan_ajout_machine(Reseau* lan, appareil* machine);
