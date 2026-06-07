@@ -8,7 +8,7 @@
 typedef struct ip ip;
 
 ip* ip_init();
-ERREUR_CODE ip_deinit(ip* ip);
+ERREUR_CODE ip_deinit(ip** ip);
 
 ERREUR_CODE ip_set_adresse(ip* ip, int octet1, int octet2, int octet3, int octet4);
 ERREUR_CODE ip_set_octet_adresse(ip* ip, int octet, size_t index);
