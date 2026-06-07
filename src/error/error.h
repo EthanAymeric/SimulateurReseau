@@ -12,6 +12,7 @@ typedef enum ERREUR_CODE {
     INDEX_OCTET,
     INVALID_ARGUMENT,
     VALEUR_CIDR,
+    TYPE,
     OK
 } ERREUR_CODE;
 
