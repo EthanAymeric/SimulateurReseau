@@ -47,12 +47,17 @@ Reseau* lan_init(size_t nbMachines, size_t nbConnexions)
     return r;
 }
 
-ERREUR_CODE lan_deinit(Reseau* lan)
+ERREUR_CODE lan_deinit(Reseau** lan)
 {
-    free(lan->machines);
-    free(lan->connexions);
+    if (lan_check_pointeur_null(*lan) != OK){
+        return POINTEUR_NULL;
+    }
+
+    free((*lan)->machines);
+    free((*lan)->connexions);
     
-    free(lan);
+    free(*lan);
+    *lan = NULL;
 
     return OK;
 }

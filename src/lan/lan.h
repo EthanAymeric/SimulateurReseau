@@ -10,7 +10,7 @@ typedef struct Lien Lien;
 typedef struct Reseau Reseau;
 
 Reseau* lan_init(size_t nbMachines, size_t nbConnexion);
-ERREUR_CODE lan_deinit(Reseau* lan);
+ERREUR_CODE lan_deinit(Reseau** lan);
 size_t lan_nombre_machine(Reseau* lan);
 size_t lan_nombre_connexion(Reseau* lan);
 
