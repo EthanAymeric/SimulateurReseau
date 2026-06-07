@@ -60,6 +60,7 @@ Un lan est un graphe ayant pour nœuds des `appareil` pouvant être soit un `Swi
 # To-Do 
 
 - [x] Ajouter tests pour `switch` 
+- [ ] Vérifier pourquoi `switch` peut init sans paramètres mais pas `station` 
 - [ ] Ajouter structure `reseauLocal` (branche `feature-Lan`)
 - [ ] Ajouter 'parseur' pour lire et décoder les fichiers de configuration 
 - [ ] Ajouter ordonnanceur
