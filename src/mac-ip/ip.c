@@ -16,6 +16,8 @@ ip* ip_init(){
     ip* a = NULL;
     a = malloc(sizeof(ip));
 
+    if (ip_check_pointeur_null(a) != OK) return NULL;
+
     return a;
 }
 

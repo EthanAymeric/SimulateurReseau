@@ -23,6 +23,8 @@ mac* mac_init(){
     mac* a = NULL;
     a = malloc(sizeof(mac));
 
+    if (mac_check_pointeur_null(a) != OK) return NULL;
+
     return a;
 }
 
