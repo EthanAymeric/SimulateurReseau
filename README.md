@@ -69,7 +69,7 @@ Un lan est un graphe ayant pour nœuds des `appareil` pouvant être soit un `Swi
 - [x] Vérifier (et tester) que les doubles `deinit`  ne font pas crash (partout)
 - [x] Vérifier pourquoi `switch` peut init sans paramètres mais pas `station` 
 - [x] Modifier les `appareil_set` pour ne plus avoir besoin de déinit après avoir changé de type
-- [ ] Ajouter structure `reseauLocal` (branche `feature-Lan`)
+- [x] Ajouter structure `reseauLocal` (branche `feature-Lan`)
 - [ ] Ajouter 'parseur' pour lire et décoder les fichiers de configuration 
 - [ ] Ajouter ordonnanceur
 - [x] Ajouter explications des structures dans le `README.md` à la manière de `IP` et `MAC` (même en mieux) pour faciliter les soutenances
