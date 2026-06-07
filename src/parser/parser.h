@@ -3,7 +3,7 @@
 
 #include "../switch/switch.h"
 #include "../station/station.h"
-//#include "../lan/lan.h"
+#include "../lan/lan.h"
 #include "../mac-ip/mac.h"
 #include "../mac-ip/ip.h"
 

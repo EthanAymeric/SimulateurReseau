@@ -31,7 +31,7 @@ ERREUR_CODE file_lan_create(FILE* fptr, Reseau* lan)
     size_t nbConnexion = (size_t)strtoul(nbConnexion_str, NULL, 10);
     
     // Init lan avec le bon nombre de machine et de connexions
-    
+    lan = lan_init(nbMachine, nbConnexion);
 
     return OK;
 }
@@ -57,8 +57,21 @@ ERREUR_CODE file_equipements_create(FILE* fptr, size_t nbMachine, Reseau* lan)
             size_t nbPorts = atoi(nbPorts_str);
             uint32_t priority_num = atol(priority_str);
 
-            // Ajouter le switch avec adresseMac_str, nbPorts et priority_num
+            // ajout du switch avec adresseMac_str, nbPorts et priority_num
+            mac* macSwitch = mac_init();
+            if (macSwitch == NULL) return ALLOCATION;
+            mac_set_string(macSwitch, adresseMac_str);
+
+            Switch* sw = switch_init_with_parameter(macSwitch, nbPorts, priority_num);
+            if (sw == NULL) return ALLOCATION;
+
+            appareil* ap = appareil_init();
+            if (ap == NULL) return ALLOCATION;
+
+            appareil_set_switch(ap, sw);
+            lan_ajout_machine(lan, ap);
         }
+
         if (strstr(strToken, "1"))
         {
             // Ajouter une Station
@@ -66,7 +79,26 @@ ERREUR_CODE file_equipements_create(FILE* fptr, size_t nbMachine, Reseau* lan)
             char* ip_str = strtok(NULL, ";");
 
             // Ajouter la station avec adresseMac_str et ip_str
+            mac* macStation = mac_init();
+            if (macStation == NULL) return ALLOCATION;
+            mac_set_string(macStation, adresseMac_str);
 
+            ip* ipStation = ip_init();
+            char* octet = strtok(ip_str, ".");
+            if (ipStation == NULL) return ALLOCATION;
+            for (size_t i = 0; i < 4; i++){
+                ip_set_octet_adresse(ipStation, atoi(octet), i);
+                octet = strtok(NULL, ".");
+            }
+            ip_set_cidr(ipStation, 24);
+
+            station* st = station_init();
+            if (st== NULL) return ALLOCATION;
+            station_set_ip_mac(st, ipStation, macStation);
+
+            appareil* ap = appareil_init();
+            if (ap == NULL) return ALLOCATION;
+            appareil_set_station(ap, st);
         }
     }
     return OK;
@@ -95,12 +127,19 @@ ERREUR_CODE file_parse(char* path, Reseau* lan)
     FILE* fptr = file_init(path);
     if (fptr == NULL)
     {
-        return ERREUR;
+        return POINTEUR_NULL;
+    }
+
+    size_t nbConnexions, nbMachines;
+    ERREUR_CODE err;
+    if ((err = lan_nombre_connexion(lan, &nbConnexions) != OK) ||
+        (err = lan_nombre_machine(lan, &nbMachines) != OK)){
+        return err;
     }
 
     file_lan_create(fptr, lan);
-    file_equipements_create(fptr, lan->nbMachine, lan);
-    file_connexions_create(fptr, lan->nbConnexion, lan);
+    file_equipements_create(fptr, nbMachines, lan);
+    file_connexions_create(fptr, nbConnexions, lan);
 
     file_deinit(fptr);
     return OK;
