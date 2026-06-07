@@ -7,11 +7,7 @@
 
 typedef size_t Interface;
 typedef struct Reseau Reseau;
-typedef struct Lien{
-    appareil* inter1;
-    appareil* inter2;
-    
-} Lien;
+typedef struct Lien Lien;
 
 
 Reseau* lan_init(size_t nbMachines, size_t nbConnexion);
