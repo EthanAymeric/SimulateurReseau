@@ -60,6 +60,8 @@ Un lan est un graphe ayant pour nœuds des `appareil` pouvant être soit un `Swi
 # To-Do 
 
 - [x] Ajouter tests pour `switch` 
+- [ ] Ajouter vérifications de pointeur null dans `switch` 
+- [ ] blinder les `init()` de toutes les structures pour éviter le crash quand `malloc` fail (condition `if (ptr == NULL) return NULL;` )
 - [ ] Vérifier pourquoi `switch` peut init sans paramètres mais pas `station` 
 - [ ] Ajouter structure `reseauLocal` (branche `feature-Lan`)
 - [ ] Ajouter 'parseur' pour lire et décoder les fichiers de configuration 
