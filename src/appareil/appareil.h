@@ -15,12 +15,12 @@ typedef enum TYPE_APPAREIL {
 } TYPE_APPAREIL;
 
 appareil* appareil_init();
-ERREUR_CODE appareil_deinit(appareil* appareil);
+ERREUR_CODE appareil_deinit(appareil* ap);
 
-ERREUR_CODE appareil_set_station(appareil* appareil, station* station);
-ERREUR_CODE appareil_set_switch(appareil* appareil, Switch* sw);
-ERREUR_CODE appareil_get_type(appareil* appareil, TYPE_APPAREIL* type);
-ERREUR_CODE appareil_get_station(appareil* appareil, station* station);
-ERREUR_CODE appareil_get_switch(appareil* appareil, Switch* sw);
+ERREUR_CODE appareil_set_station(appareil* ap, station* st);
+ERREUR_CODE appareil_set_switch(appareil* ap, Switch* sw);
+ERREUR_CODE appareil_get_type(appareil* ap, TYPE_APPAREIL* type);
+ERREUR_CODE appareil_get_station(appareil* ap, station* st);
+ERREUR_CODE appareil_get_switch(appareil* ap, Switch* sw);
 
 #endif

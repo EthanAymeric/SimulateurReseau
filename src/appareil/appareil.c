@@ -26,59 +26,59 @@ appareil* appareil_init(){
     return ap;
 }
 
-ERREUR_CODE appareil_deinit(appareil *appareil){
+ERREUR_CODE appareil_deinit(appareil *ap){
     ERREUR_CODE err;
-    if ((err = appareil_check_pointeur_null(appareil)) != OK){
+    if ((err = appareil_check_pointeur_null(ap)) != OK){
         return err;
     }
 
-    if (appareil->type == SWITCH){
-        switch_deinit(appareil->appareil.sw);
-        appareil->appareil.sw = NULL;
+    if (ap->type == SWITCH){
+        switch_deinit(ap->appareil.sw);
+        ap->appareil.sw = NULL;
     }
-    else if (appareil->type == STATION){
-        station_deinit(appareil->appareil.st);
-        appareil->appareil.st = NULL;
+    else if (ap->type == STATION){
+        station_deinit(ap->appareil.st);
+        ap->appareil.st = NULL;
     }
 
-    free(appareil);
-    appareil = NULL;
+    free(ap);
+    ap= NULL;
 
     return OK;
 }
 
-ERREUR_CODE appareil_set_station(appareil *appareil, station *station){
+ERREUR_CODE appareil_set_station(appareil *ap, station *st){
     ERREUR_CODE err; 
-    if ((err = appareil_check_pointeur_null(appareil)) != OK ||
-        (err = appareil_check_pointeur_null(station)) != OK){
+    if ((err = appareil_check_pointeur_null(ap)) != OK ||
+        (err = appareil_check_pointeur_null(st)) != OK){
         return err;
     }
 
-    if (appareil->type == SWITCH){
-        switch_deinit(appareil->appareil.sw);
+    if (ap->type == SWITCH){
+        switch_deinit(ap->appareil.sw);
     }
-    else if (appareil->type == STATION){
-        station_deinit(appareil->appareil.st);
+    else if (ap->type == STATION){
+        station_deinit(ap->appareil.st);
     }
 
-    appareil->type = STATION;
-    appareil->appareil.st = station;
+    ap->type = STATION;
+    ap->appareil.st = st;
 
     return OK;
 }
 
-ERREUR_CODE appareil_set_switch(appareil *appareil, Switch *sw){
+ERREUR_CODE appareil_set_switch(appareil *ap, Switch *sw){
     ERREUR_CODE err; 
-    if ((err = appareil_check_pointeur_null(appareil)) != OK ||
+    if ((err = appareil_check_pointeur_null(ap)) != OK ||
         (err = appareil_check_pointeur_null(sw)) != OK){
         return err;
     }
 
-    if (appareil->type == SWITCH){
-        free(appareil->appareil.sw);
+    if (ap->type == SWITCH){
+        switch_deinit(ap->appareil.sw);
     }
-    else if (appareil->type == STATION){
-        free(appareil->appareil.st);
+    else if (ap->type == STATION){
+        station_deinit(ap->appareil.st);
     }
 
     appareil->type = SWITCH;
