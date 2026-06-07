@@ -14,4 +14,6 @@ int main() {
     trame_print(trame);
     trame_print_hex(trame);
     trame_deinit(trame);
+    mac_deinit(&mac1);
+    mac_deinit(&mac2);
 }
