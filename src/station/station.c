@@ -12,11 +12,11 @@ ERREUR_CODE station_check_pointeur_null(void* ptr){
     return ptr == NULL ? POINTEUR_NULL : OK;
 }
 
-station* station_init(ip* ip, mac* mac){
+station* station_init(){
     station* a = NULL;
     a = malloc(sizeof(station));
-    a->ip = ip;
-    a->mac = mac;
+    a->ip = ip_init();
+    a->mac = mac_init();
 
     return a;
 }
@@ -60,10 +60,13 @@ ERREUR_CODE station_get_string(station* station, char* str, size_t taille_str){
 
 ERREUR_CODE station_set_ip_mac(station* station, ip* ip, mac* mac){
     ERREUR_CODE err;
-    if ((err = station_set_ip(station, ip)) != OK ||
-        (err = station_set_mac(station, mac)) != OK){
+    if ((err = station_check_pointeur_null(station)) != OK ||
+        (err = station_check_pointeur_null(ip)) != OK ||
+        (err = station_check_pointeur_null(mac)) != OK){
         return err;
     }
+    station_set_ip(station, ip);
+    station_set_mac(station, mac);
 
     return OK;
 }
@@ -75,6 +78,7 @@ ERREUR_CODE station_set_ip(station* station, ip* ip){
         return err;
     }
 
+    ip_deinit(station->ip);
     station->ip = ip;
 
     return OK;
@@ -87,6 +91,7 @@ ERREUR_CODE station_set_mac(station* station, mac* mac){
         return err;
     }
 
+    mac_deinit(station->mac);
     station->mac = mac;
 
     return OK;

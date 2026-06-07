@@ -12,11 +12,11 @@ void appareiltest_set_station(){
     ap = appareil_init();
     assert(appareil_set_station(ap, st) == POINTEUR_NULL);
 
-    st = station_init(ip_init(), mac_init());
+    st = station_init();
     assert(appareil_set_station(ap, st) == OK);
 
     appareil_set_switch(ap, sw);
-    st = station_init(ip_init(), mac_init()); // parce que set_switch deinit l'ancien station
+    st = station_init(); // parce que set_switch deinit l'ancien station
     assert(appareil_set_station(ap, st) == OK);
 
     appareil_deinit(ap);
@@ -25,7 +25,7 @@ void appareiltest_set_station(){
 void appareiltest_set_switch(){
     appareil* ap = NULL;
     Switch* sw = NULL;
-    station* st = station_init(ip_init(), mac_init());
+    station* st = station_init();
 
     assert(appareil_set_switch(ap, sw) == POINTEUR_NULL);
 
@@ -44,7 +44,7 @@ void appareiltest_set_switch(){
 
 void appareiltest_get_type(){
     appareil* ap = NULL;
-    station* st = station_init(ip_init(), mac_init());
+    station* st = station_init();
     Switch* sw = switch_init();
     TYPE_APPAREIL t, t1;
 
@@ -72,7 +72,7 @@ void appareiltest_get_type(){
 
 void appareiltest_get_station(){
     appareil* ap = NULL;
-    station* st = station_init(ip_init(), mac_init());
+    station* st = station_init();
     station* st1 = NULL;
     Switch* sw = switch_init();
 
@@ -91,7 +91,7 @@ void appareiltest_get_station(){
 
 void appareiltest_get_switch(){
     appareil* ap = NULL;
-    station* st = station_init(ip_init(), mac_init());
+    station* st = station_init();
     Switch* sw = switch_init();
     Switch* sw1 = NULL;
 

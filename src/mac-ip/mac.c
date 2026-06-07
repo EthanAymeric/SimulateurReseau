@@ -25,6 +25,8 @@ mac* mac_init(){
 
     if (mac_check_pointeur_null(a) != OK) return NULL;
 
+    mac_set_octets(a, 0, 0, 0, 0, 0, 0);
+
     return a;
 }
 

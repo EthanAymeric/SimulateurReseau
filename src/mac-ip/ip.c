@@ -18,6 +18,9 @@ ip* ip_init(){
 
     if (ip_check_pointeur_null(a) != OK) return NULL;
 
+    ip_set_adresse(a, 0, 0, 0, 0);
+    ip_set_cidr(a, 0);
+
     return a;
 }
 

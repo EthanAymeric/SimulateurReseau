@@ -130,6 +130,7 @@ ERREUR_CODE switch_set_commutation_table(Switch* s, size_t port, mac* macAddress
         return INVALID_ARGUMENT;
     }
 
+    mac_deinit(s->commutationTable[port]);
     s->commutationTable[port] = macAddress;
     return OK;
 }
