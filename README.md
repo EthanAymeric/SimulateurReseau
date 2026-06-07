@@ -53,6 +53,10 @@ Une adresse MAC est représentée par un `uint64_t` (entier sur 64 bits). Celle-
 
 **C'est à l'appelant de MAC de vérifier que l'allocation lors de `init` est réussie.** 
 
+### LAN 
+
+Un lan est un graphe ayant pour nœuds des `appareil` pouvant être soit un `Switch` soit une `station`.
+
 # To-Do 
 
 - [x] Ajouter tests pour `switch` 
