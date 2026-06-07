@@ -13,7 +13,7 @@ void stationtest_set_ip(){
     assert(station_set_ip(s, a) == POINTEUR_NULL);
     assert(station_set_ip(s, NULL) == POINTEUR_NULL);
 
-    s = station_init(a, mac_init());
+    s = station_init();
     assert(station_set_ip(s, a) == OK);
 
     station_deinit(s);
@@ -27,7 +27,7 @@ void stationtest_set_mac(){
     assert(station_set_mac(s, a) == POINTEUR_NULL);
     assert(station_set_mac(s, NULL) == POINTEUR_NULL);
 
-    s = station_init(ip_init(), a);
+    s = station_init();
     assert(station_set_mac(s, a) == OK);
 
     station_deinit(s);
@@ -40,7 +40,7 @@ void stationtest_set_ip_mac(){
 
     assert(station_set_ip_mac(s, a, b) == POINTEUR_NULL);
 
-    s = station_init(a, b);
+    s = station_init();
     assert(station_set_ip_mac(s, NULL, NULL) == POINTEUR_NULL);
     assert(station_set_ip_mac(s, NULL, b) == POINTEUR_NULL);
     assert(station_set_ip_mac(s, a, NULL) == POINTEUR_NULL);
@@ -63,7 +63,7 @@ void stationtest_get_string(){
 
     assert(station_get_string(s, str, 1) == POINTEUR_NULL);
 
-    s = station_init(a, b);
+    s = station_init();
     assert(station_get_string(s, str, 1) == TAILLE_STRING);
 
     station_set_ip_mac(s, a, b);

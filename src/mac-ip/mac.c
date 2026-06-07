@@ -23,6 +23,8 @@ mac* mac_init(){
     mac* a = NULL;
     a = malloc(sizeof(mac));
 
+    mac_set_octets(a, 0, 0, 0, 0, 0, 0);
+
     return a;
 }
 

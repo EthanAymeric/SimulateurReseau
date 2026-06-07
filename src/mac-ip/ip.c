@@ -16,6 +16,9 @@ ip* ip_init(){
     ip* a = NULL;
     a = malloc(sizeof(ip));
 
+    ip_set_adresse(a, 0, 0, 0, 0);
+    ip_set_cidr(a, 0);
+
     return a;
 }
 
