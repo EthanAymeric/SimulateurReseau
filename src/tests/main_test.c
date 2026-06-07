@@ -2,6 +2,7 @@
 #include "mac-ip/mac_test.h"
 #include "station/station_test.h"
 #include "appareil/appareil_test.h"
+#include "lan/lan_test.h"
 #include <stdlib.h>
 
 int main(int argc, char** argv){
@@ -27,5 +28,7 @@ int main(int argc, char** argv){
     appareiltest_get_station();
     appareiltest_get_switch();
 
+    lantest_nombre_machine();
+    lantest_nombre_connexion();
     return EXIT_SUCCESS;
 }

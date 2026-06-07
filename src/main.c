@@ -10,10 +10,9 @@ int main() {
     Switch* s = switch_init_with_parameter(mac, 8, 4096);
     switch_set_commutation_table(s, 5, mac);
     char* str = malloc(sizeof(char) * 255);
-    switch_show_commutation_table(s,str);
+    switch_show_commutation_table(s,str,19);
     printf("%s\n", str);
 
-    mac_deinit(mac);
     switch_deinit(s);
     free(str);
 }
