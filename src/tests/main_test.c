@@ -1,6 +1,7 @@
 #include "mac-ip/ip_test.h"
 #include "mac-ip/mac_test.h"
 #include "station/station_test.h"
+#include "appareil/appareil_test.h"
 #include <stdlib.h>
 
 int main(int argc, char** argv){
@@ -19,6 +20,12 @@ int main(int argc, char** argv){
     stationtest_set_ip_mac();
     stationtest_set_ip();
     stationtest_set_mac();
+
+    appareiltest_set_station();
+    appareiltest_set_switch();
+    appareiltest_get_type();
+    appareiltest_get_station();
+    appareiltest_get_switch();
 
     return EXIT_SUCCESS;
 }
