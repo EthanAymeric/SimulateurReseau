@@ -89,24 +89,24 @@ Switch* switch_init_with_parameter(mac* mac, size_t nbPorts, uint32_t priority)
     return s;
 }
 
-ERREUR_CODE switch_deinit(Switch* s)
+ERREUR_CODE switch_deinit(Switch** s)
 {
     ERREUR_CODE err;
-    if ((err = switch_check_pointeur_null(s)) != OK){
+    if ((err = switch_check_pointeur_null(*s)) != OK){
         return err;
     }
 
-    for (size_t i = 0; i < s->nbPorts; i++){
-        mac_deinit(s->commutationTable[i]);
+    for (size_t i = 0; i < (*s)->nbPorts; i++){
+        mac_deinit(&(*s)->commutationTable[i]);
     }
 
-    free(s->commutationTable);
-    s->commutationTable = NULL;
+    free((*s)->commutationTable);
+    (*s)->commutationTable = NULL;
 
-    mac_deinit(s->macAddress);
+    mac_deinit(&(*s)->macAddress);
 
-    free(s);
-    s = NULL;
+    free(*s);
+    *s = NULL;
 
     return OK;
 }
@@ -174,7 +174,7 @@ ERREUR_CODE switch_set_commutation_table(Switch* s, size_t port, mac* macAddress
         return INVALID_ARGUMENT;
     }
 
-    mac_deinit(s->commutationTable[port]);
+    mac_deinit(&s->commutationTable[port]);
     s->commutationTable[port] = macAddress;
     return OK;
 }

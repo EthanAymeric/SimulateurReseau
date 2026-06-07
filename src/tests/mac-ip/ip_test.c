@@ -13,7 +13,8 @@ void iptest_set_adresse(){
     assert(ip_set_adresse(a, 0, 256, 0, 0) == VALEUR_OCTET);
     assert(ip_set_adresse(a, 192, 168, 1, 1) == OK);
 
-    ip_deinit(a);
+    ip_deinit(&a);
+    ip_deinit(&a);
 }
 
 void iptest_set_octet_adresse(){
@@ -28,7 +29,7 @@ void iptest_set_octet_adresse(){
     assert(ip_set_octet_adresse(a, 1, 4) == INDEX_OCTET);
     assert(ip_set_octet_adresse(a, 192, 0) == OK);
 
-    ip_deinit(a);
+    ip_deinit(&a);
 }
 
 
@@ -42,7 +43,7 @@ void iptest_set_cidr(){
     assert(ip_set_cidr(a, 33) == VALEUR_CIDR);
     assert(ip_set_cidr(a, 24) == OK);
 
-    ip_deinit(a);
+    ip_deinit(&a);
 }
 
 void iptest_get_string(){
@@ -60,5 +61,5 @@ void iptest_get_string(){
     assert(ip_get_string(a, str2, 20) == OK);
     assert(strcmp(str2, "192.168.100.255/24") == 0);
 
-    ip_deinit(a);
+    ip_deinit(&a);
 }

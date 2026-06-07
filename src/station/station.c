@@ -34,17 +34,17 @@ station* station_init(){
     return a;
 }
 
-ERREUR_CODE station_deinit(station* station){
+ERREUR_CODE station_deinit(station** station){
     ERREUR_CODE err;
-    if ((err = station_check_pointeur_null(station)) != OK){
+    if ((err = station_check_pointeur_null(*station)) != OK){
         return err;
     }
 
-    ip_deinit(station->ip);
-    mac_deinit(station->mac);
+    ip_deinit(&(*station)->ip);
+    mac_deinit(&(*station)->mac);
 
-    free(station);
-    station = NULL;
+    free(*station);
+    *station = NULL;
 
     return OK;
 }
@@ -91,7 +91,7 @@ ERREUR_CODE station_set_ip(station* station, ip* ip){
         return err;
     }
 
-    ip_deinit(station->ip);
+    ip_deinit(&station->ip);
     station->ip = ip;
 
     return OK;
@@ -104,7 +104,7 @@ ERREUR_CODE station_set_mac(station* station, mac* mac){
         return err;
     }
 
-    mac_deinit(station->mac);
+    mac_deinit(&station->mac);
     station->mac = mac;
 
     return OK;

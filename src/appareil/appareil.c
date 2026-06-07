@@ -30,23 +30,23 @@ appareil* appareil_init(){
     return ap;
 }
 
-ERREUR_CODE appareil_deinit(appareil *ap){
+ERREUR_CODE appareil_deinit(appareil** ap){
     ERREUR_CODE err;
-    if ((err = appareil_check_pointeur_null(ap)) != OK){
+    if ((err = appareil_check_pointeur_null(*ap)) != OK){
         return err;
     }
 
-    if (ap->type == SWITCH && appareil_check_pointeur_null(ap->appareil.sw) == OK){
-        switch_deinit(ap->appareil.sw);
-        ap->appareil.sw = NULL;
+    if ((*ap)->type == SWITCH && appareil_check_pointeur_null((*ap)->appareil.sw) == OK){
+        switch_deinit(&(*ap)->appareil.sw);
+        (*ap)->appareil.sw = NULL;
     }
-    else if (ap->type == STATION && appareil_check_pointeur_null(ap->appareil.st) == OK){
-        station_deinit(ap->appareil.st);
-        ap->appareil.st = NULL;
+    else if ((*ap)->type == STATION && appareil_check_pointeur_null((*ap)->appareil.st) == OK){
+        station_deinit(&(*ap)->appareil.st);
+        (*ap)->appareil.st = NULL;
     }
 
-    free(ap);
-    ap= NULL;
+    free(*ap);
+    *ap= NULL;
 
     return OK;
 }
@@ -59,10 +59,10 @@ ERREUR_CODE appareil_set_station(appareil *ap, station *st){
     }
 
     if (ap->type == STATION){
-        station_deinit(ap->appareil.st);
+        station_deinit(&ap->appareil.st);
     }
     else if (ap->type == SWITCH){
-        switch_deinit(ap->appareil.sw);
+        switch_deinit(&ap->appareil.sw);
     }
 
     ap->type = STATION;
@@ -79,10 +79,10 @@ ERREUR_CODE appareil_set_switch(appareil *ap, Switch *sw){
     }
 
     if (ap->type == STATION){
-        station_deinit(ap->appareil.st);
+        station_deinit(&ap->appareil.st);
     }
     else if (ap->type == SWITCH){
-        switch_deinit(ap->appareil.sw);
+        switch_deinit(&ap->appareil.sw);
     }
 
     ap->type = SWITCH;

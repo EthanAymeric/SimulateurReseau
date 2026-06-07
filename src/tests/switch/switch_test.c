@@ -16,7 +16,8 @@ void switchtest_show_mac_hexa(){
     char str2[40];
     assert(switch_show_mac_hexa(s, str2, 40) == OK);
 
-    switch_deinit(s);
+    switch_deinit(&s);
+    switch_deinit(&s);
 }
 
 void switchtest_show_commutation_table(){
@@ -31,7 +32,7 @@ void switchtest_show_commutation_table(){
     char str2[1024];
     assert(switch_show_commutation_table(s, str2, 1024) == OK);
 
-    switch_deinit(s);
+    switch_deinit(&s);
 }
 
 void switchtest_set_priority(){
@@ -44,7 +45,7 @@ void switchtest_set_priority(){
     assert(switch_set_priority(s, 4096) == OK);
     assert(switch_set_priority(s, 8192) == OK);
 
-    switch_deinit(s);
+    switch_deinit(&s);
 }
 
 void switchtest_set_commutation_table(){
@@ -60,5 +61,5 @@ void switchtest_set_commutation_table(){
     mac_set_string(m, "01:23:45:67:89:0A");
     assert(switch_set_commutation_table(s, 0, m) == OK);
 
-    switch_deinit(s);
+    switch_deinit(&s);
 }

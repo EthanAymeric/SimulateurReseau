@@ -40,14 +40,14 @@ ERREUR_CODE ip_check_valeur_octet(int octet){
     return (octet >= 0 && octet < 256) ? OK : VALEUR_OCTET;
 }
 
-ERREUR_CODE ip_deinit(ip* ip){
+ERREUR_CODE ip_deinit(ip** ip){
     ERREUR_CODE err;
-    if ((err = ip_check_pointeur_null(ip)) != OK){
+    if ((err = ip_check_pointeur_null(*ip)) != OK){
         return err;
     }
 
-    free(ip);
-    ip = NULL;
+    free(*ip);
+    *ip = NULL;
 
     return OK;
 }

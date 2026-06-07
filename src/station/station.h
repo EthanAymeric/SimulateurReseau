@@ -11,7 +11,7 @@
 typedef struct station station;
 
 station* station_init();
-ERREUR_CODE station_deinit(station* station);
+ERREUR_CODE station_deinit(station** station);
 
 ERREUR_CODE station_get_string(station* station, char* str, size_t taille_str);
 ERREUR_CODE station_set_ip_mac(station* station, ip* ip, mac* mac);

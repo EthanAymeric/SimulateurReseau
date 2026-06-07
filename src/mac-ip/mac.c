@@ -42,14 +42,14 @@ ERREUR_CODE mac_check_index_octet(int index){
     return (index >= 0 && index < NB_OCTETS) ? OK : INDEX_OCTET;
 }
 
-ERREUR_CODE mac_deinit(mac* mac){
+ERREUR_CODE mac_deinit(mac** mac){
     ERREUR_CODE err;
-    if ((err = mac_check_pointeur_null(mac)) != OK){
+    if ((err = mac_check_pointeur_null(*mac)) != OK){
         return err;
     }
 
-    free(mac);
-    mac = NULL;
+    free(*mac);
+    *mac = NULL;
 
     return OK;
 }
