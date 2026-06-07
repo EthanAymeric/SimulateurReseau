@@ -6,8 +6,13 @@
 #include "../appareil/appareil.h"
 
 typedef size_t Interface;
-typedef struct Lien Lien;
 typedef struct Reseau Reseau;
+typedef struct Lien{
+    appareil* inter1;
+    appareil* inter2;
+    
+} Lien;
+
 
 Reseau* lan_init(size_t nbMachines, size_t nbConnexion);
 ERREUR_CODE lan_deinit(Reseau** lan);

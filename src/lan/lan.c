@@ -121,7 +121,7 @@ ERREUR_CODE lan_ajout_machine(Reseau* lan, appareil* machine)
         return err;
     }
 
-    lan->machines = realloc(lan->machines, sizeof(appareil*) * lan->nbMachines + 1);
+    lan->machines = realloc(lan->machines, sizeof(appareil*) * (lan->nbMachines + 1));
     
     if ((err = lan_check_pointeur_null(lan->machines)) != OK)
     {
@@ -140,7 +140,7 @@ ERREUR_CODE lan_ajout_connexion(Reseau* lan, Lien lien)
     {
         return err;
     }
-    lan->connexions = realloc(lan->connexions, sizeof(Lien) * lan->nbConnexions + 1);
+    lan->connexions = realloc(lan->connexions, sizeof(Lien) * (lan->nbConnexions + 1));
     
     if ((err = lan_check_pointeur_null(lan->connexions)) != OK)
     {
