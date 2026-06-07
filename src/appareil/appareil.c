@@ -23,6 +23,7 @@ appareil* appareil_init(){
 
     ap = malloc(sizeof(appareil));
     ap->type = INDEFINI;
+    ap->appareil.st = NULL;
 
     return ap;
 }
@@ -55,6 +56,13 @@ ERREUR_CODE appareil_set_station(appareil *ap, station *st){
         return err;
     }
 
+    if (ap->type == STATION){
+        station_deinit(ap->appareil.st);
+    }
+    else if (ap->type == SWITCH){
+        switch_deinit(ap->appareil.sw);
+    }
+
     ap->type = STATION;
     ap->appareil.st = st;
 
@@ -66,6 +74,13 @@ ERREUR_CODE appareil_set_switch(appareil *ap, Switch *sw){
     if ((err = appareil_check_pointeur_null(ap)) != OK ||
         (err = appareil_check_pointeur_null(sw)) != OK){
         return err;
+    }
+
+    if (ap->type == STATION){
+        station_deinit(ap->appareil.st);
+    }
+    else if (ap->type == SWITCH){
+        switch_deinit(ap->appareil.sw);
     }
 
     ap->type = SWITCH;

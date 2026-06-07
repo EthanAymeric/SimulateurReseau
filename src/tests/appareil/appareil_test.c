@@ -16,10 +16,9 @@ void appareiltest_set_station(){
     assert(appareil_set_station(ap, st) == OK);
 
     appareil_set_switch(ap, sw);
-    assert(appareil_set_station(ap, st) == OK);
+    st = station_init(ip_init(), mac_init()); // parce que set_switch deinit l'ancien station
     assert(appareil_set_station(ap, st) == OK);
 
-    switch_deinit(sw);
     appareil_deinit(ap);
 }
 
@@ -37,10 +36,9 @@ void appareiltest_set_switch(){
     assert(appareil_set_switch(ap, sw) == OK);
 
     appareil_set_station(ap, st);
-    assert(appareil_set_switch(ap, sw) == OK);
+    sw = switch_init();
     assert(appareil_set_switch(ap, sw) == OK);
 
-    station_deinit(st);
     appareil_deinit(ap);
 }
 
@@ -69,8 +67,6 @@ void appareiltest_get_type(){
     assert(appareil_get_type(ap, &t) == OK);
     assert(t == SWITCH);
     
-    station_deinit(st);
-    // switch_deinit(sw);
     appareil_deinit(ap);
 }
 
@@ -89,9 +85,8 @@ void appareiltest_get_station(){
     appareil_set_station(ap, st);
     assert(appareil_get_station(ap, st1) == OK);
 
-    switch_deinit(sw);
-    appareil_deinit(ap);
     // pas besoin de deinit st1 car c'est la même zone mémoire que st, qui est deinit dans appareil_deinit
+    appareil_deinit(ap);
 }
 
 void appareiltest_get_switch(){
@@ -109,7 +104,6 @@ void appareiltest_get_switch(){
     appareil_set_switch(ap, sw);
     assert(appareil_get_switch(ap, sw1) == OK);
 
-    station_deinit(st);
-    appareil_deinit(ap);
     // pas besoin de deinit sw1 car c'est la même zone mémoire que sw, qui est deinit dans appareil_deinit
+    appareil_deinit(ap);
 }

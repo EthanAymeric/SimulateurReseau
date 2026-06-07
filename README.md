@@ -57,7 +57,7 @@ Une adresse MAC est représentée par un `uint64_t` (entier sur 64 bits). Celle-
 
 - [x] Ajouter tests pour `switch` 
 - [ ] Vérifier (et tester) que les doubles deinit ne font pas crash
-- [ ] Modifier les `appareil_set` pour ne plus avoir besoin de déinit après avoir changé de type
+- [x] Modifier les `appareil_set` pour ne plus avoir besoin de déinit après avoir changé de type
 - [ ] Ajouter structure `reseauLocal` (branche `feature-Lan`)
 - [ ] Ajouter 'parseur' pour lire et décoder les fichiers de configuration 
 - [ ] Ajouter ordonnanceur
