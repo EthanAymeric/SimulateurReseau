@@ -51,12 +51,25 @@ Chaque octet de l'adresse et le masque sont représentés sous forme de byte/uin
 
 Une adresse MAC est représentée par un `uint64_t` (entier sur 64 bits). Celle-ci faisant uniquement 48 bits, seuls les 48 bits de poids faible sont utilisés. 
 
+### Appareil 
+
+Un appareil est soit un `Switch`, soit une `station`. En appelant `appareil_set_switch` ou `appareil_set_station`, l'**ancienne valeur est déinit**, il est donc impossible de set 2 fois le même `Switch` ou la même `station` pour un appareil sans l'init à nouveau. Lorsque aucune valeur n'est encore set dans un appareil, le type de celui-ci est `INDEFINI`.
+
 **C'est à l'appelant de MAC de vérifier que l'allocation lors de `init` est réussie.** 
+
+### LAN 
+
+Un lan est un graphe ayant pour nœuds des `appareil` pouvant être soit un `Switch` soit une `station`.
 
 # To-Do 
 
-- [ ] Ajouter tests pour `switch` 
+- [x] Ajouter tests pour `switch` 
+- [x] Ajouter vérifications de pointeur null dans `switch` 
+- [ ] blinder les `init()` de toutes les structures pour éviter le crash quand `malloc` fail (condition `if (ptr == NULL) return NULL;` )
+- [ ] Vérifier (et tester) que les doubles `deinit`  ne font pas crash (partout)
+- [ ] Vérifier pourquoi `switch` peut init sans paramètres mais pas `station` 
+- [x] Modifier les `appareil_set` pour ne plus avoir besoin de déinit après avoir changé de type
 - [ ] Ajouter structure `reseauLocal` (branche `feature-Lan`)
 - [ ] Ajouter 'parseur' pour lire et décoder les fichiers de configuration 
-- [ ] Ajouter explications des structures dans le `README.md` à la manière de `IP` et `MAC` (même en mieux) pour faciliter les soutenances
-- [ ] Commenter le code 
+- [ ] Ajouter ordonnanceur
+- [x] Ajouter explications des structures dans le `README.md` à la manière de `IP` et `MAC` (même en mieux) pour faciliter les soutenances
