@@ -87,38 +87,45 @@ ERREUR_CODE lan_nombre_connexion(Reseau* lan, size_t *nbConnexions)
     return OK;
 }
 
-size_t lan_get_machines_adjacentes(Reseau* lan, appareil** machines_adjacentes, appareil* machine)
+int lan_get_machines_adjacentes(Reseau* lan, appareil** machines_adjacentes, appareil* machine)
 {
-    size_t temp = 0;
-    //for (size_t i = 0; i < lan_nombre_connexion(lan); i++)
-    //{
-    //    if (lan->connexion[i].inter1 == machine)
-    //    {
-    //        machines_adjacentes[i] = lan->connexion[i].inter2;
-    //        temp++;
-    //    }
-    //    else if (lan->connexion[i].inter2 == machine)
-    //    {
-    //        machines_adjacentes[i] = lan->connexion[i].inter1;
-    //        temp++;
-    //    }
-    //}
+    if (lan_check_pointeur_null(lan) != OK ||
+        lan_check_pointeur_null(machines_adjacentes) != OK ||
+        lan_check_pointeur_null(machine) != OK){
+        return -1;
+    }
+
+    int temp = 0;
+    for (size_t i = 0; i < lan->nbConnexions; i++)
+    {
+        if (lan->connexions[i].inter1 == machine)
+        {
+            machines_adjacentes[i] = lan->connexions[i].inter2;
+            temp++;
+        }
+        else if (lan->connexions[i].inter2 == machine)
+        {
+            machines_adjacentes[i] = lan->connexions[i].inter1;
+            temp++;
+        }
+    }
 
     return temp;
 }
 
 ERREUR_CODE lan_ajout_machine(Reseau* lan, appareil* machine)
 {
-    if (lan_check_pointeur_null(lan) == POINTEUR_NULL)
+    ERREUR_CODE err;
+    if ((err = lan_check_pointeur_null(lan)) != OK)
     {
-        return POINTEUR_NULL;
+        return err;
     }
 
-    lan->machines = realloc(lan->machines, sizeof(appareil*) * lan->nbMachines+1);
+    lan->machines = realloc(lan->machines, sizeof(appareil*) * lan->nbMachines + 1);
     
-    if (lan_check_pointeur_null(lan->machines) == POINTEUR_NULL)
+    if ((err = lan_check_pointeur_null(lan->machines)) != OK)
     {
-        return POINTEUR_NULL;
+        return err;
     }
 
     lan->machines[lan->nbMachines] = machine;
@@ -128,15 +135,16 @@ ERREUR_CODE lan_ajout_machine(Reseau* lan, appareil* machine)
 
 ERREUR_CODE lan_ajout_connexion(Reseau* lan, Lien lien)
 {
-    if (lan_check_pointeur_null(lan) == POINTEUR_NULL)
+    ERREUR_CODE err;
+    if ((err = lan_check_pointeur_null(lan)) != OK)
     {
-        return POINTEUR_NULL;
+        return err;
     }
     lan->connexions = realloc(lan->connexions, sizeof(Lien) * lan->nbConnexions + 1);
     
-    if (lan_check_pointeur_null(lan->connexions) == POINTEUR_NULL)
+    if ((err = lan_check_pointeur_null(lan->connexions)) != OK)
     {
-        return POINTEUR_NULL;
+        return err;
     }
 
     lan->connexions[lan->nbConnexions] = lien;
