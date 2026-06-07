@@ -15,8 +15,21 @@ ERREUR_CODE station_check_pointeur_null(void* ptr){
 station* station_init(){
     station* a = NULL;
     a = malloc(sizeof(station));
+
+    if (station_check_pointeur_null(a) != OK) return NULL;
+
     a->ip = ip_init();
+    if (station_check_pointeur_null(a->ip) != OK){
+        free(a);
+        return NULL;
+    }
+    
     a->mac = mac_init();
+    if (station_check_pointeur_null(a->mac) != OK){
+        free(a->ip);
+        free(a);
+        return NULL;
+    }
 
     return a;
 }

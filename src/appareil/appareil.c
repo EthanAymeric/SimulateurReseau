@@ -22,6 +22,8 @@ appareil* appareil_init(){
     appareil* ap = NULL;
 
     ap = malloc(sizeof(appareil));
+    if (appareil_check_pointeur_null(ap) != OK) return NULL;
+
     ap->type = INDEFINI;
     ap->appareil.st = NULL;
 

@@ -18,13 +18,37 @@ ERREUR_CODE switch_check_pointeur_null(void* ptr)
 
 Switch* switch_init() {
     Switch* s = malloc(sizeof(Switch));
+
+    if (switch_check_pointeur_null(s) != OK) return NULL;
+
     s->macAddress = mac_init();
+    if (switch_check_pointeur_null(s->macAddress) != OK){
+        free(s);
+        return NULL;
+    }
+
     s->nbPorts = 8;
     s->prio = 32768;
     s->commutationTable = malloc(sizeof(mac*) * s->nbPorts);
+    if (switch_check_pointeur_null(s->commutationTable) != OK){
+        free(s->macAddress);
+        free(s);
+        return NULL;
+    }
+
     for (size_t i = 0; i < s->nbPorts ; i++)
     {
         s->commutationTable[i] = mac_init();
+        if (switch_check_pointeur_null(s->commutationTable[i]) != OK){
+            free(s->macAddress);
+            for (int j = i; j >= 0; j--){
+                free(s->commutationTable[j]);
+            }
+            free(s->commutationTable);
+            free(s);
+            return NULL;
+        }
+
         mac_set_octets(s->commutationTable[i], 0, 0, 0, 0, 0, 0);
     }
    
@@ -34,13 +58,33 @@ Switch* switch_init() {
 Switch* switch_init_with_parameter(mac* mac, size_t nbPorts, uint32_t priority)
 {
     Switch* s = malloc(sizeof(Switch));
+    if (switch_check_pointeur_null(s) != OK ||
+        switch_check_pointeur_null(mac)) return NULL;
+
     s->macAddress = mac;
     s->nbPorts = nbPorts;
     s->prio = priority;
     s->commutationTable = malloc(sizeof(uint64_t) * s->nbPorts);
+    if (switch_check_pointeur_null(s->commutationTable) != OK){
+        free(s->macAddress);
+        free(s);
+        return NULL;
+    }
+
     for (size_t i = 0; i < s->nbPorts ; i++)
     {
-        s->commutationTable[i] = 0;
+        s->commutationTable[i] = mac_init();
+        if (switch_check_pointeur_null(s->commutationTable[i]) != OK){
+            free(s->macAddress);
+            for (int j = i; j >= 0; j--){
+                free(s->commutationTable[j]);
+            }
+            free(s->commutationTable);
+            free(s);
+            return NULL;
+        }
+
+        mac_set_octets(s->commutationTable[i], 0, 0, 0, 0, 0, 0);
     }
     return s;
 }
