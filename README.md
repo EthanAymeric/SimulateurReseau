@@ -51,6 +51,10 @@ Chaque octet de l'adresse et le masque sont représentés sous forme de byte/uin
 
 Une adresse MAC est représentée par un `uint64_t` (entier sur 64 bits). Celle-ci faisant uniquement 48 bits, seuls les 48 bits de poids faible sont utilisés. 
 
+### Appareil 
+
+Un appareil est soit un `Switch`, soit une `station`. En appelant `appareil_set_switch` ou `appareil_set_station`, l'**ancienne valeur est déinit**, il est donc impossible de set 2 fois le même `Switch` ou la même `station` pour un appareil sans l'init à nouveau. Lorsque aucune valeur n'est encore set dans un appareil, le type de celui-ci est `INDEFINI`.
+
 **C'est à l'appelant de MAC de vérifier que l'allocation lors de `init` est réussie.** 
 
 # To-Do 
