@@ -1,5 +1,6 @@
 #include "mac-ip/mac.h"
 #include "switch/switch.h"
+#include "parser/parser.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -13,6 +14,6 @@ int main() {
     switch_show_commutation_table(s,str,19);
     printf("%s\n", str);
 
-    switch_deinit(s);
+    switch_deinit(&s);
     free(str);
 }
