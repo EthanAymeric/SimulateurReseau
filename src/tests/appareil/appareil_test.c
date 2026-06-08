@@ -108,3 +108,34 @@ void appareiltest_get_switch(){
     // pas besoin de deinit sw1 car c'est la même zone mémoire que sw, qui est deinit dans appareil_deinit
     appareil_deinit(&ap);
 }
+
+void appareiltest_get_mac_station()
+{
+    mac* expected = mac_init();
+
+    station* st = station_init();
+    station_set_ip_mac(st, NULL, expected);
+
+    appareil* ap = appareil_init();
+    appareil_set_station(ap, st);
+
+    mac* result = NULL;
+
+    assert(appareil_get_mac(ap, &result) == OK);
+    assert(result == expected);
+}
+
+void appareiltest_get_mac_switch()
+{
+    mac* expected = mac_init();
+
+    Switch* sw = switch_init_with_parameter(expected, 1, 0);
+
+    appareil* ap = appareil_init();
+    appareil_set_switch(ap, sw);
+
+    mac* result = NULL;
+
+    assert(appareil_get_mac(ap, &result) == OK);
+    assert(result == expected);
+}

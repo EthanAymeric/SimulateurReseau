@@ -128,7 +128,7 @@ ERREUR_CODE file_connexions_create(FILE* fptr, size_t nbConnexion, Reseau* lan)
         // Ajouter la connexion entre les deux interfaces
         for (size_t j = 0; j < nbMachines; j++){
             lan_get_machine(lan, j, &current);
-            appareil_get_mac(current, macCurrent);
+            appareil_get_mac(current, &macCurrent);
             mac_get_string(macCurrent, ':', macStr, 100);
 
             if (strcmp(macStr, interface1_str) == 0){
