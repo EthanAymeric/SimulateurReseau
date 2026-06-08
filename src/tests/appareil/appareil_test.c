@@ -77,14 +77,14 @@ void appareiltest_get_station(){
     station* st1 = NULL;
     Switch* sw = switch_init();
 
-    assert(appareil_get_station(ap, st) == POINTEUR_NULL);
+    assert(appareil_get_station(ap, &st) == POINTEUR_NULL);
 
     ap = appareil_init();
     appareil_set_switch(ap, sw);
-    assert(appareil_get_station(ap, st1) == TYPE);
+    assert(appareil_get_station(ap, &st1) == TYPE);
 
     appareil_set_station(ap, st);
-    assert(appareil_get_station(ap, st1) == OK);
+    assert(appareil_get_station(ap, &st1) == OK);
 
     // pas besoin de deinit st1 car c'est la même zone mémoire que st, qui est deinit dans appareil_deinit
     appareil_deinit(&ap);
@@ -96,14 +96,14 @@ void appareiltest_get_switch(){
     Switch* sw = switch_init();
     Switch* sw1 = NULL;
 
-    assert(appareil_get_switch(ap, sw) == POINTEUR_NULL);
+    assert(appareil_get_switch(ap, &sw) == POINTEUR_NULL);
 
     ap = appareil_init();
     appareil_set_station(ap, st);
-    assert(appareil_get_switch(ap, sw1) == TYPE);
+    assert(appareil_get_switch(ap, &sw1) == TYPE);
 
     appareil_set_switch(ap, sw);
-    assert(appareil_get_switch(ap, sw1) == OK);
+    assert(appareil_get_switch(ap, &sw1) == OK);
 
     // pas besoin de deinit sw1 car c'est la même zone mémoire que sw, qui est deinit dans appareil_deinit
     appareil_deinit(&ap);

@@ -110,14 +110,14 @@ ERREUR_CODE station_set_mac(station* station, mac* mac){
     return OK;
 }
 
-ERREUR_CODE station_get_mac(station* station, mac* mac){
+ERREUR_CODE station_get_mac(station* station, mac** mac){
     ERREUR_CODE err;
     if ((err = station_check_pointeur_null(station)) != OK ||
         (err = station_check_pointeur_null(station->mac)) != OK){
         return err;
     }
 
-    mac = station->mac;
+    *mac = station->mac;
 
     return OK;
 }

@@ -19,7 +19,7 @@ void file_deinit(FILE* fptr)
 }
 
 
-ERREUR_CODE file_lan_create(FILE* fptr, Reseau* lan)
+ERREUR_CODE file_lan_create(FILE* fptr, Reseau** lan)
 {
     char lan_config[20];
     fgets(lan_config, 20, fptr);
@@ -31,7 +31,7 @@ ERREUR_CODE file_lan_create(FILE* fptr, Reseau* lan)
     size_t nbConnexion = (size_t)strtoul(nbConnexion_str, NULL, 10);
     
     // Init lan avec le bon nombre de machine et de connexions
-    lan = lan_init(nbMachine, nbConnexion);
+    *lan = lan_init(nbMachine, nbConnexion);
 
     return OK;
 }
@@ -127,7 +127,7 @@ ERREUR_CODE file_connexions_create(FILE* fptr, size_t nbConnexion, Reseau* lan)
 
         // Ajouter la connexion entre les deux interfaces
         for (size_t j = 0; j < nbMachines; j++){
-            lan_get_machine(lan, j, current);
+            lan_get_machine(lan, j, &current);
             appareil_get_mac(current, macCurrent);
             mac_get_string(macCurrent, ':', macStr, 100);
 
@@ -160,7 +160,7 @@ ERREUR_CODE file_parse(char* path, Reseau* lan)
         return err;
     }
 
-    file_lan_create(fptr, lan);
+    file_lan_create(fptr, &lan);
     file_equipements_create(fptr, nbMachines, lan);
     file_connexions_create(fptr, nbConnexions, lan);
 

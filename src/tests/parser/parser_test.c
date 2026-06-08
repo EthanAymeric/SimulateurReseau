@@ -37,7 +37,7 @@ void parsertest_file_lan_create()
 
     Reseau* lan = lan_init(0, 0);
 
-    assert(file_lan_create(fptr, lan) == OK);
+    assert(file_lan_create(fptr, &lan) == OK);
 
     file_deinit(fptr);
     lan_deinit(&lan);

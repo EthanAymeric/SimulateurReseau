@@ -150,14 +150,14 @@ ERREUR_CODE lan_ajout_connexion(Reseau* lan, Lien lien)
     return OK;
 }
 
-ERREUR_CODE lan_get_machine(Reseau* lan, size_t index, appareil* ap){
+ERREUR_CODE lan_get_machine(Reseau* lan, size_t index, appareil** ap){
     ERREUR_CODE err;
     if ((err = lan_check_pointeur_null(lan)) != OK ||
         (err = lan_check_index_machine(lan, index)) != OK){
         return err;
     }
 
-    ap = lan->machines[index];
+    *ap = lan->machines[index];
 
     return OK;
 }
