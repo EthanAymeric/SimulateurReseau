@@ -172,7 +172,13 @@ ERREUR_CODE appareil_recieve_trame(Trame* trame, appareil* recepteur)
     return OK;
 }
 
-size_t appareil_get_ordnanceur_size(appareil* ap)
+ERREUR_CODE appareil_get_ordnanceur_size(appareil* ap, size_t* size)
 {
-    return ap->nbTrame;
+    ERREUR_CODE err;
+    if ((err = appareil_check_pointeur_null(ap)) != OK){
+        return err;
+    }
+
+    *size = ap->nbTrame;
+    return OK;
 }

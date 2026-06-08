@@ -24,7 +24,8 @@ ERREUR_CODE appareil_get_type(appareil* ap, TYPE_APPAREIL* type);
 ERREUR_CODE appareil_get_station(appareil* ap, station* st);
 ERREUR_CODE appareil_get_switch(appareil* ap, Switch* sw);
 ERREUR_CODE appareil_recieve_trame(Trame* trame, appareil* recepteur);
-size_t appareil_get_ordnanceur_size(appareil* ap);
+ERREUR_CODE appareil_get_ordnanceur_size(appareil* ap, size_t* size);
+
 
 
 

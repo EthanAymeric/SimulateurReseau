@@ -1,6 +1,7 @@
 #include "appareil_test.h"
 #include "../../appareil/appareil.h"
 #include <assert.h>
+#include <stdlib.h>
 
 void appareiltest_set_station(){
     appareil* ap = NULL;
@@ -120,14 +121,17 @@ void appareiltest_recieve_trame()
 
     trame = trame_init(NULL, NULL, "data");
     assert(appareil_recieve_trame(trame, ap) == OK);
-
-    assert(appareil_get_ordnanceur_size(ap) == 1);
+    size_t* size = malloc(sizeof(size_t));
+    appareil_get_ordnanceur_size(ap, size);
+    assert(*size == 1);
     for (size_t i = 0; i < 8; i++)
     {
         trame = trame_init(NULL, NULL, "data");
         assert(appareil_recieve_trame(trame, ap) == OK);
     }
-    assert(appareil_get_ordnanceur_size(ap) == 9);
+    appareil_get_ordnanceur_size(ap, size);
+    assert(*size == 9);
 
     appareil_deinit(&ap);
+    free(size);
 }
