@@ -178,3 +178,15 @@ ERREUR_CODE switch_set_commutation_table(Switch* s, size_t port, mac* macAddress
     s->commutationTable[port] = macAddress;
     return OK;
 }
+
+ERREUR_CODE switch_get_mac(Switch* s, mac* m){
+    ERREUR_CODE err;
+    if ((err = switch_check_pointeur_null(s)) != OK ||
+        (err = switch_check_pointeur_null(s->macAddress)) != OK){
+        return err;
+    }
+
+    m = s->macAddress;
+
+    return OK;
+}

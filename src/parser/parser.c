@@ -1,5 +1,5 @@
 #include "parser.h"
-
+#include <string.h>
 
 FILE* file_init(char* path)
 {
@@ -98,7 +98,9 @@ ERREUR_CODE file_equipements_create(FILE* fptr, size_t nbMachine, Reseau* lan)
 
             appareil* ap = appareil_init();
             if (ap == NULL) return ALLOCATION;
+
             appareil_set_station(ap, st);
+            lan_ajout_machine(lan, ap);
         }
     }
     return OK;
@@ -107,17 +109,38 @@ ERREUR_CODE file_equipements_create(FILE* fptr, size_t nbMachine, Reseau* lan)
 ERREUR_CODE file_connexions_create(FILE* fptr, size_t nbConnexion, Reseau* lan)
 {
     char ligne[255];
-    size_t i;
+    size_t i, nbMachines;
+    appareil* current;
+    mac* macCurrent;
+    char macStr[100];
+    lan_nombre_machine(lan, &nbMachines);
+
+    Lien l;
 
     for (i = 0; i < nbConnexion; i++)
     {
         fgets(ligne, 255, fptr);
 
-        char* interface1_str= strtok(ligne, ";");
+        char* interface1_str = strtok(ligne, ";");
         char* interface2_str = strtok(NULL, ";");
         char* poids_str = strtok(NULL, ";");
 
         // Ajouter la connexion entre les deux interfaces
+        for (size_t j = 0; j < nbMachines; j++){
+            lan_get_machine(lan, j, current);
+            appareil_get_mac(current, macCurrent);
+            mac_get_string(macCurrent, ':', macStr, 100);
+
+            if (strcmp(macStr, interface1_str) == 0){
+                l.inter1 = current;
+            }
+            else if (strcmp(macStr, interface2_str) == 0){
+                l.inter2 = current;
+            }
+        }
+        l.poids = atoi(poids_str);
+
+        lan_ajout_connexion(lan, l);
     }
     return OK;
 }

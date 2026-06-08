@@ -134,3 +134,27 @@ ERREUR_CODE appareil_get_switch(appareil *ap, Switch *sw){
 
     return OK;
 }
+
+ERREUR_CODE appareil_get_mac(appareil* ap, mac* mac){
+    TYPE_APPAREIL type;
+    appareil_get_type(ap, &type);
+    station* st;
+    Switch* sw;
+
+    switch (type){
+        case SWITCH:
+            appareil_get_switch(ap, sw);
+            break;
+
+        case STATION:
+            appareil_get_station(ap, st);
+            station_get_mac(st, mac);
+            break;
+
+        case INDEFINI:
+            return INVALID_ARGUMENT;
+            break;
+    }
+
+    return OK;
+}
