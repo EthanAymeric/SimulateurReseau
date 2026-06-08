@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include "../error/error.h"
 #include "../mac-ip/mac.h"
+#include "../interface/interface.h"
 
 typedef struct commutateur Switch;
 

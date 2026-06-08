@@ -5,7 +5,8 @@
 #include <string.h>
 
 struct commutateur {
-    mac** commutationTable; 
+    mac** commutationTable;
+    Interface* connexions;
     mac* macAddress;
     uint32_t prio;
     size_t nbPorts;
