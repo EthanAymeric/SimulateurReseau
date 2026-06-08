@@ -19,6 +19,7 @@ appareil* appareil_init();
 ERREUR_CODE appareil_deinit(appareil** ap);
 
 ERREUR_CODE appareil_set_station(appareil* ap, station* st);
+ERREUR_CODE appareil_set_switch(appareil *ap, Switch *sw);
 ERREUR_CODE appareil_get_type(appareil* ap, TYPE_APPAREIL* type);
 ERREUR_CODE appareil_recieve_trame(Trame* trame, appareil* recepteur);
 ERREUR_CODE appareil_get_ordnanceur_size(appareil* ap, size_t* size);
