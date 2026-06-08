@@ -24,10 +24,8 @@ ERREUR_CODE appareil_get_type(appareil* ap, TYPE_APPAREIL* type);
 ERREUR_CODE appareil_recieve_trame(Trame* trame, appareil* recepteur);
 ERREUR_CODE appareil_get_ordnanceur_size(appareil* ap, size_t* size);
 
-
-
 ERREUR_CODE appareil_get_station(appareil* ap, station** st);
 ERREUR_CODE appareil_get_switch(appareil* ap, Switch** sw);
-ERREUR_CODE appareil_get_mac(appareil* ap, mac* mac);
+ERREUR_CODE appareil_get_mac(appareil* ap, mac** mac);
 
 #endif

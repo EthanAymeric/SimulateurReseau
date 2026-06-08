@@ -151,7 +151,7 @@ ERREUR_CODE appareil_get_switch(appareil *ap, Switch **sw){
     return OK;
 }
 
-ERREUR_CODE appareil_get_mac(appareil* ap, mac* mac){
+ERREUR_CODE appareil_get_mac(appareil* ap, mac** mac){
     TYPE_APPAREIL type;
     appareil_get_type(ap, &type);
     station* st = NULL;
@@ -160,11 +160,12 @@ ERREUR_CODE appareil_get_mac(appareil* ap, mac* mac){
     switch (type){
         case SWITCH:
             appareil_get_switch(ap, &sw);
+            switch_get_mac(sw, mac);
             break;
 
         case STATION:
             appareil_get_station(ap, &st);
-            station_get_mac(st, &mac);
+            station_get_mac(st, mac);
             break;
 
         case INDEFINI:
