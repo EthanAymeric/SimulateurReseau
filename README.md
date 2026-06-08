@@ -73,3 +73,10 @@ Un lan est un graphe ayant pour nœuds des `appareil` pouvant être soit un `Swi
 - [ ] Ajouter 'parseur' pour lire et décoder les fichiers de configuration 
 - [ ] Ajouter ordonnanceur
 - [x] Ajouter explications des structures dans le `README.md` à la manière de `IP` et `MAC` (même en mieux) pour faciliter les soutenances
+
+- [ ] Gérer les interfaces
+- [ ] Ajouter un send_trame qui prend en paramètre l'adresse destination (L'interface en face) et la trame
+- [ ] Recv pour traiter les trames dans le buffer
+- [ ] STP
+- [ ] Corriger le parseur
+- [ ] Ajouter des tests si on a pas la flemme
