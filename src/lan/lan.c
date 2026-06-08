@@ -5,12 +5,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-struct Lien{
-    appareil* inter1;
-    appareil* inter2;
-    
-};
-
 typedef struct Reseau {
     appareil** machines;
     Lien* connexions;
@@ -21,6 +15,10 @@ typedef struct Reseau {
 ERREUR_CODE lan_check_pointeur_null(void* ptr)
 {
     return (ptr == NULL) ? POINTEUR_NULL : OK;
+}
+
+ERREUR_CODE lan_check_index_machine(Reseau* lan, size_t index){
+    return (index < lan->nbMachines) ? OK : INVALID_ARGUMENT;
 }
 
 Reseau* lan_init(size_t nbMachines, size_t nbConnexions)
@@ -149,5 +147,17 @@ ERREUR_CODE lan_ajout_connexion(Reseau* lan, Lien lien)
 
     lan->connexions[lan->nbConnexions] = lien;
     lan->nbConnexions++;
+    return OK;
+}
+
+ERREUR_CODE lan_get_machine(Reseau* lan, size_t index, appareil** ap){
+    ERREUR_CODE err;
+    if ((err = lan_check_pointeur_null(lan)) != OK ||
+        (err = lan_check_index_machine(lan, index)) != OK){
+        return err;
+    }
+
+    *ap = lan->machines[index];
+
     return OK;
 }

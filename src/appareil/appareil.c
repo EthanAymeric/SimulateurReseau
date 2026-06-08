@@ -103,7 +103,7 @@ ERREUR_CODE appareil_get_type(appareil *ap, TYPE_APPAREIL *type){
     return OK;
 }
 
-ERREUR_CODE appareil_get_station(appareil *ap, station *st){
+ERREUR_CODE appareil_get_station(appareil *ap, station **st){
     ERREUR_CODE err; 
     if ((err = appareil_check_pointeur_null(ap)) != OK ||
         (err = appareil_check_pointeur_null(ap->appareil.st)) != OK){
@@ -114,12 +114,12 @@ ERREUR_CODE appareil_get_station(appareil *ap, station *st){
     }
 
     // pour pouvoir modifier les informations de la station en dehors de appareil
-    st = ap->appareil.st;
+    *st = ap->appareil.st;
 
     return OK;
 }
 
-ERREUR_CODE appareil_get_switch(appareil *ap, Switch *sw){
+ERREUR_CODE appareil_get_switch(appareil *ap, Switch **sw){
     ERREUR_CODE err; 
     if ((err = appareil_check_pointeur_null(ap)) != OK ||
         (err = appareil_check_pointeur_null(ap->appareil.sw)) != OK){
@@ -130,7 +130,31 @@ ERREUR_CODE appareil_get_switch(appareil *ap, Switch *sw){
     }
 
     // pour pouvoir modifier les informations du switch en dehors de appareil
-    sw = ap->appareil.sw;
+    *sw = ap->appareil.sw;
+
+    return OK;
+}
+
+ERREUR_CODE appareil_get_mac(appareil* ap, mac* mac){
+    TYPE_APPAREIL type;
+    appareil_get_type(ap, &type);
+    station* st = NULL;
+    Switch* sw = NULL;
+
+    switch (type){
+        case SWITCH:
+            appareil_get_switch(ap, &sw);
+            break;
+
+        case STATION:
+            appareil_get_station(ap, &st);
+            station_get_mac(st, &mac);
+            break;
+
+        case INDEFINI:
+            return INVALID_ARGUMENT;
+            break;
+    }
 
     return OK;
 }

@@ -4,6 +4,7 @@
 #include "appareil/appareil_test.h"
 #include "trame/trame_test.h"
 #include "lan/lan_test.h"
+#include "parser/parser_test.h"
 #include <stdlib.h>
 
 int main(int argc, char** argv){
@@ -34,6 +35,11 @@ int main(int argc, char** argv){
 
     print_trame_test();
     print_trame_hex_test();
+
+    parsertest_file_lan_create();
+    parsertest_file_parse_invalid_file();
+    parsertest_file_equipements_create_empty();
+    parsertest_file_connexions_create_empty();
 
     return EXIT_SUCCESS;
 }
