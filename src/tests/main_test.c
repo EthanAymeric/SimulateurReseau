@@ -35,5 +35,7 @@ int main(int argc, char** argv){
     print_trame_test();
     print_trame_hex_test();
 
+    appareiltest_recieve_trame();
+
     return EXIT_SUCCESS;
 }

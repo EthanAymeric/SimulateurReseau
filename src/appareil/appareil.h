@@ -4,6 +4,7 @@
 #include "../error/error.h"
 #include "../station/station.h"
 #include "../switch/switch.h"
+#include "../trame/trame.h"
 #include <error.h>
 
 typedef struct appareil appareil;
@@ -22,5 +23,9 @@ ERREUR_CODE appareil_set_switch(appareil* ap, Switch* sw);
 ERREUR_CODE appareil_get_type(appareil* ap, TYPE_APPAREIL* type);
 ERREUR_CODE appareil_get_station(appareil* ap, station* st);
 ERREUR_CODE appareil_get_switch(appareil* ap, Switch* sw);
+ERREUR_CODE appareil_recieve_trame(Trame* trame, appareil* recepteur);
+size_t appareil_get_ordnanceur_size(appareil* ap);
+
+
 
 #endif

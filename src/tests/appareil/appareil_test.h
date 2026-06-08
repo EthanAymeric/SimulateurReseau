@@ -6,6 +6,8 @@ void appareiltest_set_switch();
 void appareiltest_get_type();
 void appareiltest_get_station();
 void appareiltest_get_switch();
+void appareiltest_recieve_trame();
+
 
 #endif
 

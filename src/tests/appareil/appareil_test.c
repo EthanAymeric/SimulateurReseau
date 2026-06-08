@@ -108,3 +108,26 @@ void appareiltest_get_switch(){
     // pas besoin de deinit sw1 car c'est la même zone mémoire que sw, qui est deinit dans appareil_deinit
     appareil_deinit(&ap);
 }
+
+void appareiltest_recieve_trame()
+{
+    appareil* ap = NULL;
+    Trame* trame = NULL;
+    assert(appareil_recieve_trame(trame, ap) == POINTEUR_NULL);
+
+    ap = appareil_init();
+    assert(appareil_recieve_trame(trame, ap) == POINTEUR_NULL);
+
+    trame = trame_init(NULL, NULL, "data");
+    assert(appareil_recieve_trame(trame, ap) == OK);
+
+    assert(appareil_get_ordnanceur_size(ap) == 1);
+    for (size_t i = 0; i < 8; i++)
+    {
+        trame = trame_init(NULL, NULL, "data");
+        assert(appareil_recieve_trame(trame, ap) == OK);
+    }
+    assert(appareil_get_ordnanceur_size(ap) == 9);
+
+    appareil_deinit(&ap);
+}

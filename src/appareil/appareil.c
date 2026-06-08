@@ -5,8 +5,13 @@
 #include "../switch/switch.h"
 #include "../station/station.h"
 
+const size_t ORD_SIZE = 8;
+
 struct appareil {
     TYPE_APPAREIL type;
+    Trame** ordnanceur;
+    size_t tailleOrdnanceur;
+    size_t nbTrame;
 
     union {
         station* st;
@@ -23,7 +28,9 @@ appareil* appareil_init(){
 
     ap = malloc(sizeof(appareil));
     if (appareil_check_pointeur_null(ap) != OK) return NULL;
-
+    ap->tailleOrdnanceur = ORD_SIZE;
+    ap->ordnanceur = malloc(sizeof(Trame*) * ap->tailleOrdnanceur);
+    ap->nbTrame = 0;
     ap->type = INDEFINI;
     ap->appareil.st = NULL;
 
@@ -44,6 +51,15 @@ ERREUR_CODE appareil_deinit(appareil** ap){
         station_deinit(&(*ap)->appareil.st);
         (*ap)->appareil.st = NULL;
     }
+
+    for (size_t i = 0; i < (*ap)->nbTrame; i++)
+    {
+        if (appareil_check_pointeur_null((*ap)->ordnanceur[i]) != POINTEUR_NULL)
+        {
+            trame_deinit((*ap)->ordnanceur[i]);
+        }
+    }
+    free((*ap)->ordnanceur);
 
     free(*ap);
     *ap= NULL;
@@ -133,4 +149,30 @@ ERREUR_CODE appareil_get_switch(appareil *ap, Switch *sw){
     sw = ap->appareil.sw;
 
     return OK;
+}
+
+ERREUR_CODE appareil_recieve_trame(Trame* trame, appareil* recepteur)
+{
+    if(appareil_check_pointeur_null(trame) == POINTEUR_NULL || appareil_check_pointeur_null(recepteur) == POINTEUR_NULL)
+    {
+        return POINTEUR_NULL;
+    }
+    size_t index = recepteur->nbTrame;
+
+    if (index == recepteur->tailleOrdnanceur)
+    {
+        recepteur->tailleOrdnanceur *= 2;
+        recepteur->ordnanceur = realloc(recepteur->ordnanceur, sizeof(Trame*) * recepteur->tailleOrdnanceur);
+
+    }
+
+    recepteur->ordnanceur[index] = trame;
+    recepteur->nbTrame++;
+
+    return OK;
+}
+
+size_t appareil_get_ordnanceur_size(appareil* ap)
+{
+    return ap->nbTrame;
 }

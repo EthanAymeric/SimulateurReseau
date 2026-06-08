@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include "trame.h"
+#include "../appareil/appareil.h"
 
 Trame* trame_init(mac* adresse_source, mac* adresse_destination, char* data)
 {
@@ -26,10 +27,8 @@ Trame* trame_init(mac* adresse_source, mac* adresse_destination, char* data)
 
 void trame_deinit(Trame* trame)
 {
-    if (trame != NULL)
-    {
         free(trame);
-    }
+        trame = NULL;
 }
 
 void trame_print(Trame* trame)
