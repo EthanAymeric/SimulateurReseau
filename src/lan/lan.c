@@ -5,12 +5,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-struct Lien{
-    appareil* inter1;
-    appareil* inter2;
-    
-};
-
 typedef struct Reseau {
     appareil** machines;
     Lien* connexions;

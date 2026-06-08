@@ -10,7 +10,7 @@ typedef struct Reseau Reseau;
 typedef struct Lien{
     appareil* inter1;
     appareil* inter2;
-    
+    size_t poids;
 } Lien;
 
 

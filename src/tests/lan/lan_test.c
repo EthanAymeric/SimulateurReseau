@@ -66,6 +66,7 @@ void lantest_ajout_connexion()
     Lien lien;
     lien.inter1 = machine1;
     lien.inter2 = machine2;
+    lien.poids = 100;
 
     size_t nbConnexions = 0;
     assert(lan_nombre_connexion(lan, &nbConnexions) == OK);
@@ -94,8 +95,8 @@ void lantest_get_machines_adjacentes()
     assert(lan_ajout_machine(lan, machine2) == OK);
     assert(lan_ajout_machine(lan, machine3) == OK);
 
-    Lien lien1 = { machine1, machine2 };
-    Lien lien2 = { machine1, machine3 };
+    Lien lien1 = { machine1, machine2, 100 };
+    Lien lien2 = { machine1, machine3, 100 };
 
     assert(lan_ajout_connexion(lan, lien1) == OK);
     assert(lan_ajout_connexion(lan, lien2) == OK);
