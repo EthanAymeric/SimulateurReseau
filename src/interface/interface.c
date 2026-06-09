@@ -16,7 +16,7 @@ Interface* interface_init()
     {
         return NULL;
     }
-    inter->autreAppareil = malloc(sizeof(Interface*));
+    inter->autreAppareil = NULL;
     inter->poids = 4;
     inter->mac = mac_init();
     inter->buffer = malloc(sizeof(Trame*) * 8);
@@ -53,15 +53,14 @@ Interface* interface_init_with_parameters(Interface** other, size_t valuation, m
     return inter;
 }
 
-void interface_deinit(Interface* inter)
+void interface_deinit(Interface** inter)
 {
-    for (size_t i = 0; i < inter->tailleBuffer; i++)
-    {
-        free(inter->buffer[i]);
-        inter->buffer[i] = NULL; 
-    }
-    free(inter->buffer);
-    free(inter);
+    size_t length = 0;
+    interface_get_buffer_size(*inter, &length);
+    
+    free((*inter)->mac);
+    free((*inter)->buffer);
+    free((*inter));
 }
 
 ERREUR_CODE interface_set_interface(Interface* inter, Interface** other)
@@ -101,4 +100,11 @@ ERREUR_CODE interface_traite_trame(Interface* inter)
     {
         trame_print(inter->buffer[i]);
     }
+}
+
+ERREUR_CODE interface_get_buffer_size(Interface* inter, size_t* size)
+{
+    if (inter == NULL) return POINTEUR_NULL;
+
+    *size = inter->nbElementBuffer;
 }

@@ -5,6 +5,18 @@
 #include "trame.h"
 #include "../appareil/appareil.h"
 
+typedef struct Trame
+{
+    mac* adresse_source;
+    mac* adresse_destination;
+    char* data;
+
+    uint8_t type[2];
+    uint8_t SFD;
+    uint8_t preambule[7];
+    uint8_t FCS[4];
+} Trame;
+
 Trame* trame_init(mac* adresse_source, mac* adresse_destination, char* data)
 {
     Trame* trame = malloc(sizeof(Trame));
@@ -25,9 +37,9 @@ Trame* trame_init(mac* adresse_source, mac* adresse_destination, char* data)
     return trame;
 }
 
-void trame_deinit(Trame* trame)
+void trame_deinit(Trame** trame)
 {
-        free(trame);
+        free(*trame);
         trame = NULL;
 }
 
@@ -35,8 +47,8 @@ void trame_print(Trame* trame)
 {
     if (trame != NULL)
     {
-        char source[18];
-        char destination[18];
+        char source[18] = "";
+        char destination[18] = "";
         mac_get_string(trame->adresse_source, ':', source, sizeof(source));
         mac_get_string(trame->adresse_destination, ':', destination, sizeof(destination));
         printf("Adresse source: %s\n", source);

@@ -4,7 +4,7 @@
 #include "../error/error.h"
 #include "../mac-ip/ip.h"
 #include "../mac-ip/mac.h"
-
+#include "../interface/interface.h"
 #include <stddef.h>
 #include <stdint.h>
 

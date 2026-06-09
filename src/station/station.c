@@ -6,6 +6,7 @@
 struct station {
     ip* ip;
     mac* mac;
+    Interface* connexion;
 };
 
 ERREUR_CODE station_check_pointeur_null(void* ptr){
@@ -26,6 +27,15 @@ station* station_init(){
     
     a->mac = mac_init();
     if (station_check_pointeur_null(a->mac) != OK){
+        free(a->ip);
+        free(a);
+        return NULL;
+    }
+
+    a->connexion = interface_init();
+    if (station_check_pointeur_null(a->connexion) != OK)
+    {
+        free(a->mac);
         free(a->ip);
         free(a);
         return NULL;

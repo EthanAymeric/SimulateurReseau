@@ -56,7 +56,7 @@ ERREUR_CODE appareil_deinit(appareil** ap){
     {
         if (appareil_check_pointeur_null((*ap)->ordnanceur[i]) != POINTEUR_NULL)
         {
-            trame_deinit((*ap)->ordnanceur[i]);
+            trame_deinit(&(*ap)->ordnanceur[i]);
         }
     }
     free((*ap)->ordnanceur);

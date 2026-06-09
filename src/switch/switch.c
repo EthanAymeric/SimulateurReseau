@@ -70,7 +70,7 @@ Switch* switch_init_with_parameter(mac* mac, size_t nbPorts, uint32_t priority)
 {
     Switch* s = malloc(sizeof(Switch));
     if (switch_check_pointeur_null(s) != OK ||
-        switch_check_pointeur_null(mac)) return NULL;
+        switch_check_pointeur_null(mac) != OK) return NULL;
 
     s->macAddress = mac;
     s->connexions = malloc(sizeof(Interface*) * nbPorts);
@@ -118,10 +118,17 @@ ERREUR_CODE switch_deinit(Switch** s)
         mac_deinit(&(*s)->commutationTable[i]);
     }
 
+    for(size_t j = 0; j < (*s)->nbConnexions; j++)
+    {
+        interface_deinit(&(*s)->connexions[j]);
+    }
+
     free((*s)->commutationTable);
     (*s)->commutationTable = NULL;
 
     mac_deinit(&(*s)->macAddress);
+
+    free((*s)->connexions);
 
     free(*s);
     *s = NULL;
@@ -215,4 +222,16 @@ ERREUR_CODE switch_set_interface(Switch* s, Interface* inter)
 
     s->connexions[s->nbConnexions] = inter;
     s->nbConnexions++;
+    return OK;
+}
+
+ERREUR_CODE switch_broadcast_trame(Switch* s, Trame* trame)
+{
+    if (switch_check_pointeur_null(s) == POINTEUR_NULL || switch_check_pointeur_null(trame) == POINTEUR_NULL) return POINTEUR_NULL;
+
+    for (size_t i = 0; i < s->nbConnexions; i++)
+    {
+        interface_send_trame(trame,s->connexions[i]);
+    }
+    return OK;
 }
