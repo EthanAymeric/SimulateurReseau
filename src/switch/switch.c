@@ -7,6 +7,7 @@
 struct commutateur {
     mac** commutationTable;
     Interface** connexions;
+    size_t nbConnexions;
     mac* macAddress;
     uint32_t prio;
     size_t nbPorts;
@@ -28,7 +29,16 @@ Switch* switch_init() {
         return NULL;
     }
 
+    
     s->nbPorts = 8;
+    s->connexions = malloc(sizeof(Interface*) * s->nbPorts);
+    if (switch_check_pointeur_null(s->connexions) != OK)
+    {
+        mac_deinit(&s->macAddress);
+        free(s);
+        return NULL;
+    }
+    s->nbConnexions = 0;
     s->prio = 32768;
     s->commutationTable = malloc(sizeof(mac*) * s->nbPorts);
     if (switch_check_pointeur_null(s->commutationTable) != OK){
@@ -63,6 +73,13 @@ Switch* switch_init_with_parameter(mac* mac, size_t nbPorts, uint32_t priority)
         switch_check_pointeur_null(mac)) return NULL;
 
     s->macAddress = mac;
+    s->connexions = malloc(sizeof(Interface*) * nbPorts);
+    if (switch_check_pointeur_null(s->connexions) != OK)
+    {
+        mac_deinit(&s->macAddress);
+        free(s);
+        return NULL;
+    }
     s->nbPorts = nbPorts;
     s->prio = priority;
     s->commutationTable = malloc(sizeof(uint64_t) * s->nbPorts);
@@ -190,4 +207,12 @@ ERREUR_CODE switch_get_mac(Switch* s, mac** m){
     *m = s->macAddress;
 
     return OK;
+}
+
+ERREUR_CODE switch_set_interface(Switch* s, Interface* inter)
+{
+    if (switch_check_pointeur_null(s) != OK || switch_check_pointeur_null(inter) != OK) return POINTEUR_NULL;
+
+    s->connexions[s->nbConnexions] = inter;
+    s->nbConnexions++;
 }

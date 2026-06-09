@@ -9,6 +9,12 @@
 
 typedef struct Interface Interface;
 
-ERREUR_CODE send_trame(Trame* trame,Interface* emetteur);
+ERREUR_CODE interface_send_trame(Trame* trame,Interface* emetteur);
+ERREUR_CODE interface_recieve_trame(Trame* trame, Interface* recepteur);
+Interface* interface_init();
+Interface* interface_init_with_parameters(Interface* other, size_t valuation, mac* macAddress);
+void interface_deinit(Interface* inter);
+ERREUR_CODE interface_set_interface(Interface* inter, Interface* other);
+
 
 #endif
