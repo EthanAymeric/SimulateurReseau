@@ -3,7 +3,6 @@
 #include <string.h>
 
 #include "trame.h"
-#include "../appareil/appareil.h"
 
 typedef struct Trame
 {
