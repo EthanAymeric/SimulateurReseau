@@ -37,7 +37,7 @@ ERREUR_CODE file_lan_create(FILE* fptr, Reseau** lan)
 }
 
 
-ERREUR_CODE file_equipements_create(FILE* fptr, size_t nbMachine, Reseau* lan)
+ERREUR_CODE file_equipements_create(FILE* fptr, size_t nbMachine, Reseau** lan)
 {
     char ligne[255];
     size_t i;
@@ -69,7 +69,7 @@ ERREUR_CODE file_equipements_create(FILE* fptr, size_t nbMachine, Reseau* lan)
             if (ap == NULL) return ALLOCATION;
 
             appareil_set_switch(ap, sw);
-            lan_ajout_machine(lan, ap);
+            lan_ajout_machine(*lan, ap);
         }
 
         if (strstr(strToken, "1"))
@@ -100,20 +100,20 @@ ERREUR_CODE file_equipements_create(FILE* fptr, size_t nbMachine, Reseau* lan)
             if (ap == NULL) return ALLOCATION;
 
             appareil_set_station(ap, st);
-            lan_ajout_machine(lan, ap);
+            lan_ajout_machine(*lan, ap);
         }
     }
     return OK;
 }
 
-ERREUR_CODE file_connexions_create(FILE* fptr, size_t nbConnexion, Reseau* lan)
+ERREUR_CODE file_connexions_create(FILE* fptr, size_t nbConnexion, Reseau** lan)
 {
     char ligne[255];
     size_t i, nbMachines;
     appareil* current;
     mac* macCurrent;
     char macStr[100];
-    lan_nombre_machine(lan, &nbMachines);
+    lan_nombre_machine(*lan, &nbMachines);
 
     Lien l;
 
@@ -127,7 +127,7 @@ ERREUR_CODE file_connexions_create(FILE* fptr, size_t nbConnexion, Reseau* lan)
 
         // Ajouter la connexion entre les deux interfaces
         for (size_t j = 0; j < nbMachines; j++){
-            lan_get_machine(lan, j, &current);
+            lan_get_machine(*lan, j, &current);
             appareil_get_mac(current, &macCurrent);
             mac_get_string(macCurrent, ':', macStr, 100);
 
@@ -140,29 +140,28 @@ ERREUR_CODE file_connexions_create(FILE* fptr, size_t nbConnexion, Reseau* lan)
         }
         l.poids = atoi(poids_str);
 
-        lan_ajout_connexion(lan, l);
+        lan_ajout_connexion(*lan, l);
     }
     return OK;
 }
 
-ERREUR_CODE file_parse(char* path, Reseau* lan)
+ERREUR_CODE file_parse(char* path, Reseau** lan)
 {
     FILE* fptr = file_init(path);
     if (fptr == NULL)
     {
         return POINTEUR_NULL;
     }
-
     size_t nbConnexions, nbMachines;
+    file_lan_create(fptr, lan);
     ERREUR_CODE err;
-    if ((err = lan_nombre_connexion(lan, &nbConnexions) != OK) ||
-        (err = lan_nombre_machine(lan, &nbMachines) != OK)){
+    if ((err = lan_nombre_connexion(*lan, &nbConnexions) != OK) ||
+    (err = lan_nombre_machine(*lan, &nbMachines) != OK)){
         return err;
     }
-
-    file_lan_create(fptr, &lan);
-    file_equipements_create(fptr, nbMachines, lan);
-    file_connexions_create(fptr, nbConnexions, lan);
+    
+    if ((err =file_equipements_create(fptr, nbMachines, lan) != OK)) return err;
+    if ((err = file_connexions_create(fptr, nbConnexions, lan) != OK)) return err;
 
     file_deinit(fptr);
     return OK;

@@ -14,8 +14,8 @@
 FILE* file_init(char* path);
 void file_deinit(FILE* fptr);
 ERREUR_CODE file_lan_create(FILE* fptr, Reseau** lan);
-ERREUR_CODE file_equipements_create(FILE* fptr, size_t nbMachine, Reseau* lan);
-ERREUR_CODE file_connexions_create(FILE* fptr, size_t nbConnexion, Reseau* lan);
-ERREUR_CODE file_parse(char* path, Reseau* lan);
+ERREUR_CODE file_equipements_create(FILE* fptr, size_t nbMachine, Reseau** lan);
+ERREUR_CODE file_connexions_create(FILE* fptr, size_t nbConnexion, Reseau** lan);
+ERREUR_CODE file_parse(char* path, Reseau** lan);
 
 #endif
