@@ -2,18 +2,20 @@
 #include "switch/switch.h"
 #include "parser/parser.h"
 #include "trame/trame.h"
+#include "interface/interface.h"
 #include <stdlib.h>
 #include <stdio.h>
 
 int main() {
-    mac* mac1 = mac_init();
-    mac_set_string(mac1, "11:22:33:44:55:66");
-    mac* mac2 = mac_init();
-    mac_set_string(mac2, "66:77:88:99:AA:BB");
-    Trame* trame = trame_init(mac1, mac2, "Hello, World!");
-    trame_print(trame);
-    trame_print_hex(trame);
-    trame_deinit(trame);
-    mac_deinit(&mac1);
-    mac_deinit(&mac2);
+    Interface* inter1 = interface_init();
+    Interface* inter2 = interface_init();
+
+    interface_set_interface(inter1, &inter2);
+    interface_set_interface(inter2, &inter1);
+    interface_send_trame(trame_init(NULL,NULL,"data"), inter1);
+
+    interface_traite_trame(inter2);
+
+    interface_deinit(inter1);
+    interface_deinit(inter2);
 }

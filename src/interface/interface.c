@@ -1,7 +1,7 @@
 #include "interface.h"
 
 typedef struct Interface{
-    Interface* autreAppareil;
+    Interface** autreAppareil;
     size_t poids;
     mac* mac;
     Trame** buffer;
@@ -16,7 +16,7 @@ Interface* interface_init()
     {
         return NULL;
     }
-    inter->autreAppareil = interface_init();
+    inter->autreAppareil = malloc(sizeof(Interface*));
     inter->poids = 4;
     inter->mac = mac_init();
     inter->buffer = malloc(sizeof(Trame*) * 8);
@@ -31,7 +31,7 @@ Interface* interface_init()
     return inter;
 }
 
-Interface* interface_init_with_parameters(Interface* other, size_t valuation, mac* macAddress)
+Interface* interface_init_with_parameters(Interface** other, size_t valuation, mac* macAddress)
 {
     Interface* inter = malloc(sizeof(Interface));
     if (inter == NULL)
@@ -64,7 +64,7 @@ void interface_deinit(Interface* inter)
     free(inter);
 }
 
-ERREUR_CODE interface_set_interface(Interface* inter, Interface* other)
+ERREUR_CODE interface_set_interface(Interface* inter, Interface** other)
 {
     if (inter == NULL || other == NULL) return POINTEUR_NULL;
 
@@ -91,6 +91,14 @@ ERREUR_CODE interface_recieve_trame(Trame* trame, Interface* recepteur)
 ERREUR_CODE interface_send_trame(Trame* trame, Interface* emetteur){
     if(trame == NULL || emetteur == NULL) return POINTEUR_NULL;
 
-    interface_recieve_trame(trame, emetteur->autreAppareil);
+    interface_recieve_trame(trame, *emetteur->autreAppareil);
+    return OK;
 }
 
+ERREUR_CODE interface_traite_trame(Interface* inter)
+{
+    for (size_t i = 0; i < inter->nbElementBuffer; i++)
+    {
+        trame_print(inter->buffer[i]);
+    }
+}
