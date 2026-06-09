@@ -5,7 +5,6 @@
 #include "../station/station.h"
 #include "../appareil/appareil.h"
 
-typedef size_t Interface;
 typedef struct Reseau Reseau;
 typedef struct Lien{
     appareil* inter1;

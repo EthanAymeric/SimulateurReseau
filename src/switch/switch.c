@@ -6,7 +6,7 @@
 
 struct commutateur {
     mac** commutationTable;
-    Interface* connexions;
+    Interface** connexions;
     mac* macAddress;
     uint32_t prio;
     size_t nbPorts;
