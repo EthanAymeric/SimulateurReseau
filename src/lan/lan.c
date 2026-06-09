@@ -54,6 +54,10 @@ ERREUR_CODE lan_deinit(Reseau** lan)
         return err;
     }
 
+    for (size_t i = 0; i < (*lan)->nbMachines; i++)
+    {
+       appareil_deinit(&(*lan)->machines[i]);
+    }
     free((*lan)->machines);
     free((*lan)->connexions);
     

@@ -31,14 +31,14 @@ Interface* interface_init()
     return inter;
 }
 
-Interface* interface_init_with_parameters(Interface** other, size_t valuation, mac* macAddress)
+Interface* interface_init_with_parameters(size_t valuation, mac* macAddress)
 {
     Interface* inter = malloc(sizeof(Interface));
     if (inter == NULL)
     {
         return NULL;
     }
-    inter->autreAppareil = other;
+    inter->autreAppareil = NULL;
     inter->poids = valuation;
     inter->mac = macAddress;
     inter->buffer = malloc(sizeof(Trame*) * 8);
@@ -68,6 +68,7 @@ ERREUR_CODE interface_set_interface(Interface* inter, Interface** other)
     if (inter == NULL || other == NULL) return POINTEUR_NULL;
 
     inter->autreAppareil = other;
+    return OK;
 }
 
 
@@ -100,6 +101,7 @@ ERREUR_CODE interface_traite_trame(Interface* inter)
     {
         trame_print(inter->buffer[i]);
     }
+    return OK;
 }
 
 ERREUR_CODE interface_get_buffer_size(Interface* inter, size_t* size)
@@ -107,4 +109,5 @@ ERREUR_CODE interface_get_buffer_size(Interface* inter, size_t* size)
     if (inter == NULL) return POINTEUR_NULL;
 
     *size = inter->nbElementBuffer;
+    return OK;
 }

@@ -106,35 +106,50 @@ ERREUR_CODE file_equipements_create(FILE* fptr, size_t nbMachine, Reseau** lan)
     return OK;
 }
 
-ERREUR_CODE file_connexions_create(FILE* fptr, size_t nbConnexion, Reseau** lan)
+ERREUR_CODE file_connexions_create(FILE* fptr, Reseau** lan)
 {
     char ligne[255];
-    size_t i, nbMachines;
-    appareil* current;
-    mac* macCurrent;
-    char macStr[100];
-    lan_nombre_machine(*lan, &nbMachines);
 
-    for (i = 0; i < nbConnexion; i++)
+    while(fgets(ligne, 255, fptr))
     {
-        fgets(ligne, 255, fptr);
-
         char* interface1_str = strtok(ligne, ";");
         char* interface2_str = strtok(NULL, ";");
-        char* poids_str = strtok(NULL, ";");
+        char* poids_str = strtok(NULL, ";");       
 
-        // Ajouter la connexion entre les deux interfaces
-        for (size_t j = 0; j < nbMachines; j++){
-            lan_get_machine(*lan, j, &current);
-            appareil_get_mac(current, &macCurrent);
-            mac_get_string(macCurrent, ':', macStr, 100);
+        size_t indexInter1 = atoi(interface1_str);
+        size_t indexInter2 = atoi(interface2_str);
+        size_t poids = atoi(poids_str);
 
-            if (strcmp(macStr, interface1_str) == 0){
-                l.inter1 = current;
-            }
-            else if (strcmp(macStr, interface2_str) == 0){
-                l.inter2 = current;
-            }
+        appareil* app1 = NULL;
+        appareil* app2 = NULL;
+        lan_get_machine(*lan, indexInter1,&app1);
+        lan_get_machine(*lan, indexInter2,&app2);
+        
+        mac* mac1 = NULL;
+        mac* mac2 = NULL;
+        appareil_get_mac(app1, &mac1);
+        appareil_get_mac(app2, &mac2);
+
+        Interface* inter1 = interface_init_with_parameters(poids, mac1);
+        Interface* inter2 = interface_init_with_parameters(poids, mac2);
+
+        TYPE_APPAREIL type1;
+        TYPE_APPAREIL type2;
+        appareil_get_type(app1, &type1);
+        appareil_get_type(app2, &type2);
+
+        if (type1 == SWITCH)
+        {
+            Switch* sw1 = NULL;
+            appareil_get_switch(app1, &sw1);
+            switch_set_interface(sw1, inter1);
+        }
+
+        if (type2 == SWITCH)
+        {
+            Switch* sw2 = NULL;
+            appareil_get_switch(app1, &sw2);
+            switch_set_interface(sw2, inter2);
         }
     }
     return OK;
@@ -156,7 +171,7 @@ ERREUR_CODE file_parse(char* path, Reseau** lan)
     }
     
     if ((err =file_equipements_create(fptr, nbMachines, lan) != OK)) return err;
-    if ((err = file_connexions_create(fptr, nbConnexions, lan) != OK)) return err;
+    if ((err = file_connexions_create(fptr, lan) != OK)) return err;
 
     file_deinit(fptr);
     return OK;
