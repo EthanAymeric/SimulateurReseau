@@ -42,38 +42,52 @@ void trame_deinit(Trame** trame)
         trame = NULL;
 }
 
-void trame_print(Trame* trame)
+ERREUR_CODE trame_print(Trame* trame)
 {
-    if (trame != NULL)
-    {
-        char source[18] = "";
-        char destination[18] = "";
-        mac_get_string(trame->adresse_source, ':', source, sizeof(source));
-        mac_get_string(trame->adresse_destination, ':', destination, sizeof(destination));
-        printf("Adresse source: %s\n", source);
-        printf("Adresse destination: %s\n", destination);
-        printf("Data: %s\n", trame->data);
-    }
+    if (trame == NULL) return POINTEUR_NULL;
+
+    char source[18] = "";
+    char destination[18] = "";
+    mac_get_string(trame->adresse_source, ':', source, sizeof(source));
+    mac_get_string(trame->adresse_destination, ':', destination, sizeof(destination));
+    printf("Adresse source: %s\n", source);
+    printf("Adresse destination: %s\n", destination);
+    printf("Data: %s\n", trame->data);
+
+    return OK;
 }
 
-void trame_print_hex(Trame* trame)
+ERREUR_CODE trame_print_hex(Trame* trame)
 {
-    if (trame != NULL)
+    if (trame == NULL) return POINTEUR_NULL;
+
+    for (size_t i = 0; i < sizeof(trame->preambule); i++)
     {
-        for (size_t i = 0; i < sizeof(trame->preambule); i++)
-        {
-            printf("%02X ", trame->preambule[i]);
-        }
-        printf("%02X ", trame->SFD);
-        printf("%02X %02X ", trame->type[0], trame->type[1]);
-        for (size_t i = 0; i < strlen(trame->data); i++)
-        {
-            printf("%02X ", (unsigned char)trame->data[i]);
-        }
-        for (size_t i = 0; i < sizeof(trame->FCS); i++)
-        {
-            printf("%02X ", trame->FCS[i]);
-        }
-        printf("\n");
+        printf("%02X ", trame->preambule[i]);
     }
+    printf("%02X ", trame->SFD);
+    printf("%02X %02X ", trame->type[0], trame->type[1]);
+    for (size_t i = 0; i < strlen(trame->data); i++)
+    {
+        printf("%02X ", (unsigned char)trame->data[i]);
+    }
+    for (size_t i = 0; i < sizeof(trame->FCS); i++)
+    {
+        printf("%02X ", trame->FCS[i]);
+    }
+    printf("\n");
+}
+
+ERREUR_CODE trame_get_source(Trame* trame, mac** source)
+{
+    if (trame == NULL) return POINTEUR_NULL;
+
+    *source = trame->adresse_source;
+}
+
+ERREUR_CODE trame_get_destination(Trame* trame, mac** destination)
+{
+    if (trame == NULL) return POINTEUR_NULL;
+
+    *destination = trame->adresse_destination;
 }
