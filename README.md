@@ -80,3 +80,9 @@ Un lan est un graphe ayant pour nœuds des `appareil` pouvant être soit un `Swi
 - [ ] STP
 - [ ] Corriger le parseur
 - [ ] Ajouter des tests si on a pas la flemme
+
+
+- [ ] supprimer mac et commutationTable de switch (car il y a interface et connexions)
+- [ ] remplacer mac de station par interface et lui ajouter send_trame et receive_trame
+- [ ] ajouter send et receive trame dans appareil 
+- [ ] appareil_get_ordnanceur_size ??? (voir compilation)
