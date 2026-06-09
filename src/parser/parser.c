@@ -115,8 +115,6 @@ ERREUR_CODE file_connexions_create(FILE* fptr, size_t nbConnexion, Reseau** lan)
     char macStr[100];
     lan_nombre_machine(*lan, &nbMachines);
 
-    Lien l;
-
     for (i = 0; i < nbConnexion; i++)
     {
         fgets(ligne, 255, fptr);
@@ -138,9 +136,6 @@ ERREUR_CODE file_connexions_create(FILE* fptr, size_t nbConnexion, Reseau** lan)
                 l.inter2 = current;
             }
         }
-        l.poids = atoi(poids_str);
-
-        lan_ajout_connexion(*lan, l);
     }
     return OK;
 }

@@ -10,6 +10,7 @@ typedef struct Reseau {
     Lien* connexions;
     size_t nbConnexions;
     size_t nbMachines;
+    size_t tailleTabMachines;
 } Reseau;
 
 ERREUR_CODE lan_check_pointeur_null(void* ptr)
@@ -26,8 +27,9 @@ Reseau* lan_init(size_t nbMachines, size_t nbConnexions)
     Reseau* r = malloc(sizeof(Reseau));
     if (r == NULL) return NULL;
 
-    r->nbMachines = nbMachines;
+    r->nbMachines = 0;
     r->nbConnexions = nbConnexions;
+    r->tailleTabMachines = nbMachines;
     r->machines = malloc(sizeof(appareil*) * nbMachines);
     if (r->machines == NULL)
     {
@@ -68,7 +70,7 @@ ERREUR_CODE lan_nombre_machine(Reseau* lan, size_t* nbMachines)
         return err;
     }
 
-    *nbMachines = lan->nbMachines;
+    *nbMachines = lan->tailleTabMachines;
 
     return OK;
 }
@@ -118,14 +120,17 @@ ERREUR_CODE lan_ajout_machine(Reseau* lan, appareil* machine)
     {
         return err;
     }
-
-    lan->machines = realloc(lan->machines, sizeof(appareil*) * (lan->nbMachines + 1));
-    
     if ((err = lan_check_pointeur_null(lan->machines)) != OK)
     {
         return err;
     }
 
+
+    if (lan->nbMachines == lan->tailleTabMachines)
+    {
+        lan->tailleTabMachines *= 2;
+        lan->machines = realloc(lan->machines, sizeof(appareil*) * lan->tailleTabMachines);
+    }
     lan->machines[lan->nbMachines] = machine;
     lan->nbMachines++;
     return OK;
