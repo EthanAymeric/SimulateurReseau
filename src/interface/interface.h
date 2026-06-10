@@ -15,8 +15,10 @@ Interface* interface_init();
 Interface* interface_init_with_parameters(size_t valuation, mac* macAddress);
 ERREUR_CODE interface_get_buffer_size(Interface* inter, size_t* size);
 void interface_deinit(Interface** inter);
-ERREUR_CODE interface_set_interface(Interface* inter, Interface** other);
+ERREUR_CODE interface_set_interface(Interface* inter, Interface* other);
 ERREUR_CODE interface_traite_trame(Interface* inter);
+ERREUR_CODE interface_get_trame(Interface* inter, size_t index, Trame** trame);
+ERREUR_CODE interface_vider_buffer(Interface* inter);
 
 
 

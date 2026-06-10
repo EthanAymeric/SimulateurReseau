@@ -52,6 +52,8 @@ ERREUR_CODE station_deinit(station** station){
 
     ip_deinit(&(*station)->ip);
     mac_deinit(&(*station)->mac);
+    if ((*station)->connexion != NULL)
+        interface_deinit(&(*station)->connexion);
 
     free(*station);
     *station = NULL;
@@ -117,6 +119,20 @@ ERREUR_CODE station_set_mac(station* station, mac* mac){
     mac_deinit(&station->mac);
     station->mac = mac;
 
+    return OK;
+}
+
+ERREUR_CODE station_set_connexion(station* st, Interface* inter){
+    if (station_check_pointeur_null(st) != OK) return POINTEUR_NULL;
+    if (st->connexion != NULL)
+        interface_deinit(&st->connexion);
+    st->connexion = inter;
+    return OK;
+}
+
+ERREUR_CODE station_get_connexion(station* st, Interface** inter){
+    if (station_check_pointeur_null(st) != OK) return POINTEUR_NULL;
+    *inter = st->connexion;
     return OK;
 }
 

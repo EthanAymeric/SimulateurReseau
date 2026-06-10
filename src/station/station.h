@@ -18,5 +18,7 @@ ERREUR_CODE station_get_mac(station* station, mac** mac);
 ERREUR_CODE station_set_ip_mac(station* station, ip* ip, mac* mac);
 ERREUR_CODE station_set_ip(station* station, ip* ip);
 ERREUR_CODE station_set_mac(station* station, mac* mac);
+ERREUR_CODE station_set_connexion(station* st, Interface* inter);
+ERREUR_CODE station_get_connexion(station* st, Interface** inter);
 
 #endif

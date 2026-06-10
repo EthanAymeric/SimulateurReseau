@@ -25,13 +25,10 @@ ERREUR_CODE file_lan_create(FILE* fptr, Reseau** lan)
     fgets(lan_config, 20, fptr);
 
     char* nbMachine_str = strtok(lan_config, " ");
-    char* nbConnexion_str = strtok(NULL, " ");
 
     size_t nbMachine = (size_t)strtoul(nbMachine_str, NULL, 10);
-    size_t nbConnexion = (size_t)strtoul(nbConnexion_str, NULL, 10);
-    
-    // Init lan avec le bon nombre de machine et de connexions
-    *lan = lan_init(nbMachine, nbConnexion);
+
+    *lan = lan_init(nbMachine);
 
     return OK;
 }
@@ -144,13 +141,28 @@ ERREUR_CODE file_connexions_create(FILE* fptr, Reseau** lan)
             appareil_get_switch(app1, &sw1);
             switch_set_interface(sw1, inter1);
         }
+        else if (type1 == STATION)
+        {
+            station* st1 = NULL;
+            appareil_get_station(app1, &st1);
+            station_set_connexion(st1, inter1);
+        }
 
         if (type2 == SWITCH)
         {
             Switch* sw2 = NULL;
-            appareil_get_switch(app1, &sw2);
+            appareil_get_switch(app2, &sw2);
             switch_set_interface(sw2, inter2);
         }
+        else if (type2 == STATION)
+        {
+            station* st2 = NULL;
+            appareil_get_station(app2, &st2);
+            station_set_connexion(st2, inter2);
+        }
+
+        interface_set_interface(inter1, inter2);
+        interface_set_interface(inter2, inter1);
     }
     return OK;
 }
@@ -162,16 +174,14 @@ ERREUR_CODE file_parse(char* path, Reseau** lan)
     {
         return POINTEUR_NULL;
     }
-    size_t nbConnexions, nbMachines;
-    file_lan_create(fptr, lan);
     ERREUR_CODE err;
-    if ((err = lan_nombre_connexion(*lan, &nbConnexions) != OK) ||
-    (err = lan_nombre_machine(*lan, &nbMachines) != OK)){
-        return err;
-    }
-    
-    if ((err =file_equipements_create(fptr, nbMachines, lan) != OK)) return err;
-    if ((err = file_connexions_create(fptr, lan) != OK)) return err;
+    if ((err = file_lan_create(fptr, lan)) != OK) return err;
+
+    size_t nbMachines;
+    if ((err = lan_nombre_machine(*lan, &nbMachines)) != OK) return err;
+
+    if ((err = file_equipements_create(fptr, nbMachines, lan)) != OK) return err;
+    if ((err = file_connexions_create(fptr, lan)) != OK) return err;
 
     file_deinit(fptr);
     return OK;

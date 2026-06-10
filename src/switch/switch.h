@@ -16,9 +16,12 @@ ERREUR_CODE switch_show_mac_hexa(Switch* s, char* str, size_t taille_str);
 ERREUR_CODE switch_show_commutation_table(Switch* s, char* str, size_t taille_str);
 ERREUR_CODE switch_set_priority(Switch* s, uint32_t prio);
 ERREUR_CODE switch_set_commutation_table(Switch* s, size_t port, mac* macAddress);
+ERREUR_CODE switch_learn_mac(Switch* s, mac* adresse, size_t port);
+ERREUR_CODE switch_find_port(Switch* s, mac* adresse, size_t* port);
 ERREUR_CODE switch_get_mac(Switch* s, mac** m);
 ERREUR_CODE switch_set_interface(Switch* s, Interface* inter);
 ERREUR_CODE switch_broadcast_trame(Switch* s, Trame* trame);
+ERREUR_CODE switch_commuter_trame(Switch* s, Trame* trame, size_t port_entree);
 ERREUR_CODE switch_traiter_trame(Switch* s);
 
 

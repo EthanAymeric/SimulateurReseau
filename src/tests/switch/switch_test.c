@@ -27,6 +27,11 @@ void switchtest_show_commutation_table(){
     assert(switch_show_commutation_table(s, str, 1) == POINTEUR_NULL);
 
     s = switch_init();
+    assert(switch_show_commutation_table(s, str, 1) == OK);
+
+    mac* m = mac_init();
+    mac_set_string(m, "01:23:45:67:89:0A");
+    switch_set_commutation_table(s, 0, m);
     assert(switch_show_commutation_table(s, str, 1) == TAILLE_STRING);
 
     char str2[1024];
