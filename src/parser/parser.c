@@ -117,7 +117,8 @@ ERREUR_CODE file_connexions_create(FILE* fptr, Reseau** lan)
         size_t indexInter2 = atoi(interface2_str);
         size_t poids = atoi(poids_str);
 
-        if (poids == 0)
+        // Un poids de 0 veut dire vitesse de connexion illimitée CQFD
+        if (poids <= 0)
         {
             return VALEUR;
         }
