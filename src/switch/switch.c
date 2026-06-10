@@ -18,6 +18,12 @@ struct commutateur {
     mac* macAddress;
     uint32_t prio;
     size_t nbPorts;
+    /* STP */
+    PORT_ETAT* etatsPorts;
+    uint32_t stp_root_prio;
+    char stp_root_mac[18];
+    uint32_t stp_root_cost;
+    int stp_root_port;    /* -1 = ce switch est la racine */
 };
 
 ERREUR_CODE switch_check_pointeur_null(void* ptr)
@@ -56,6 +62,12 @@ Switch* switch_init()
         return NULL;
     }
 
+    s->etatsPorts = NULL;
+    s->stp_root_prio = 0;
+    s->stp_root_mac[0] = '\0';
+    s->stp_root_cost = 0;
+    s->stp_root_port = -1;
+
     return s;
 }
 
@@ -84,6 +96,12 @@ Switch* switch_init_with_parameter(mac* mac, size_t nbPorts, uint32_t priority)
         return NULL;
     }
 
+    s->etatsPorts = NULL;
+    s->stp_root_prio = 0;
+    s->stp_root_mac[0] = '\0';
+    s->stp_root_cost = 0;
+    s->stp_root_port = -1;
+
     return s;
 }
 
@@ -102,6 +120,8 @@ ERREUR_CODE switch_deinit(Switch** s)
         interface_deinit(&(*s)->connexions[j]);
     }
     free((*s)->connexions);
+
+    free((*s)->etatsPorts);
 
     mac_deinit(&(*s)->macAddress);
 
@@ -153,6 +173,28 @@ ERREUR_CODE switch_set_priority(Switch* s, uint32_t priority)
         return OK;
     }
     return INVALID_ARGUMENT;
+}
+
+ERREUR_CODE switch_get_priority(Switch* s, uint32_t* prio)
+{
+    if (switch_check_pointeur_null(s) != OK || prio == NULL) return POINTEUR_NULL;
+    *prio = s->prio;
+    return OK;
+}
+
+ERREUR_CODE switch_get_nb_connexions(Switch* s, size_t* nb)
+{
+    if (switch_check_pointeur_null(s) != OK || nb == NULL) return POINTEUR_NULL;
+    *nb = s->nbConnexions;
+    return OK;
+}
+
+ERREUR_CODE switch_get_connexion(Switch* s, size_t port, Interface** inter)
+{
+    if (switch_check_pointeur_null(s) != OK || inter == NULL) return POINTEUR_NULL;
+    if (port >= s->nbConnexions) return INVALID_ARGUMENT;
+    *inter = s->connexions[port];
+    return OK;
 }
 
 ERREUR_CODE switch_learn_mac(Switch* s, mac* adresse, size_t port)
@@ -251,6 +293,7 @@ ERREUR_CODE switch_broadcast_trame(Switch* s, Trame* trame)
         switch_check_pointeur_null(trame) == POINTEUR_NULL) return POINTEUR_NULL;
 
     for (size_t i = 0; i < s->nbConnexions; i++) {
+        if (s->etatsPorts != NULL && s->etatsPorts[i] == PORT_BLOQUE) continue;
         interface_send_trame(trame, s->connexions[i]);
     }
     return OK;
@@ -272,12 +315,13 @@ ERREUR_CODE switch_commuter_trame(Switch* s, Trame* trame, size_t port_entree)
 
     size_t port_dest;
     if (destination != NULL && switch_find_port(s, destination, &port_dest) == OK) {
-        interface_send_trame(trame, s->connexions[port_dest]);
+        if (s->etatsPorts == NULL || s->etatsPorts[port_dest] != PORT_BLOQUE)
+            interface_send_trame(trame, s->connexions[port_dest]);
     } else {
         for (size_t i = 0; i < s->nbConnexions; i++) {
-            if (i != port_entree) {
-                interface_send_trame(trame, s->connexions[i]);
-            }
+            if (i == port_entree) continue;
+            if (s->etatsPorts != NULL && s->etatsPorts[i] == PORT_BLOQUE) continue;
+            interface_send_trame(trame, s->connexions[i]);
         }
     }
 
@@ -289,6 +333,10 @@ ERREUR_CODE switch_traiter_trame(Switch* s)
     if (switch_check_pointeur_null(s) == POINTEUR_NULL) return POINTEUR_NULL;
 
     for (size_t port = 0; port < s->nbConnexions; port++) {
+        if (s->etatsPorts != NULL && s->etatsPorts[port] == PORT_BLOQUE) {
+            interface_vider_buffer(s->connexions[port]);
+            continue;
+        }
         size_t nbTrames = 0;
         interface_get_buffer_size(s->connexions[port], &nbTrames);
 
@@ -300,5 +348,80 @@ ERREUR_CODE switch_traiter_trame(Switch* s)
 
         interface_vider_buffer(s->connexions[port]);
     }
+    return OK;
+}
+
+/* ── STP ─────────────────────────────────────────── */
+
+ERREUR_CODE switch_stp_init(Switch* s)
+{
+    if (switch_check_pointeur_null(s) != OK) return POINTEUR_NULL;
+
+    if (s->etatsPorts == NULL) {
+        s->etatsPorts = malloc(sizeof(PORT_ETAT) * s->nbPorts);
+        if (s->etatsPorts == NULL) return ALLOCATION;
+    }
+    for (size_t i = 0; i < s->nbPorts; i++)
+        s->etatsPorts[i] = PORT_INCONNU;
+
+    /* Chaque switch suppose qu'il est la racine */
+    mac* m;
+    switch_get_mac(s, &m);
+    mac_get_string(m, ':', s->stp_root_mac, sizeof(s->stp_root_mac));
+    s->stp_root_prio = s->prio;
+    s->stp_root_cost = 0;
+    s->stp_root_port = -1;
+
+    return OK;
+}
+
+ERREUR_CODE switch_stp_get_root_info(Switch* s, uint32_t* root_prio, char* root_mac,
+                                      size_t mac_len, uint32_t* root_cost, int* root_port)
+{
+    if (switch_check_pointeur_null(s) != OK) return POINTEUR_NULL;
+    *root_prio = s->stp_root_prio;
+    strncpy(root_mac, s->stp_root_mac, mac_len - 1);
+    root_mac[mac_len - 1] = '\0';
+    *root_cost = s->stp_root_cost;
+    *root_port = s->stp_root_port;
+    return OK;
+}
+
+ERREUR_CODE switch_stp_try_update(Switch* s, uint32_t root_prio, const char* root_mac,
+                                   uint32_t cost, size_t via_port, int* changed)
+{
+    if (switch_check_pointeur_null(s) != OK) return POINTEUR_NULL;
+
+    /* Compare (prio, mac) : plus petit = meilleure racine */
+    int cmp_prio = (root_prio < s->stp_root_prio) ? -1
+                 : (root_prio > s->stp_root_prio) ? 1 : 0;
+    int cmp_mac  = strcmp(root_mac, s->stp_root_mac);
+    int better_root = (cmp_prio < 0) || (cmp_prio == 0 && cmp_mac < 0);
+    int same_root   = (cmp_prio == 0 && cmp_mac == 0);
+
+    if (better_root || (same_root && cost < s->stp_root_cost)) {
+        s->stp_root_prio = root_prio;
+        strncpy(s->stp_root_mac, root_mac, sizeof(s->stp_root_mac) - 1);
+        s->stp_root_mac[sizeof(s->stp_root_mac) - 1] = '\0';
+        s->stp_root_cost = cost;
+        s->stp_root_port = (int)via_port;
+        *changed = 1;
+    }
+    return OK;
+}
+
+ERREUR_CODE switch_stp_get_port_etat(Switch* s, size_t port, PORT_ETAT* etat)
+{
+    if (switch_check_pointeur_null(s) != OK || etat == NULL) return POINTEUR_NULL;
+    if (s->etatsPorts == NULL || port >= s->nbPorts) return INVALID_ARGUMENT;
+    *etat = s->etatsPorts[port];
+    return OK;
+}
+
+ERREUR_CODE switch_stp_set_port_etat(Switch* s, size_t port, PORT_ETAT etat)
+{
+    if (switch_check_pointeur_null(s) != OK) return POINTEUR_NULL;
+    if (s->etatsPorts == NULL || port >= s->nbPorts) return INVALID_ARGUMENT;
+    s->etatsPorts[port] = etat;
     return OK;
 }

@@ -139,7 +139,14 @@ ERREUR_CODE file_connexions_create(FILE* fptr, Reseau** lan)
         {
             Switch* sw1 = NULL;
             appareil_get_switch(app1, &sw1);
-            switch_set_interface(sw1, inter1);
+            if (switch_set_interface(sw1, inter1) != OK)
+            {
+                fprintf(stderr, "Erreur config : le switch %zu n'a pas assez de ports "
+                        "declares pour accueillir toutes ses connexions.\n", indexInter1);
+                interface_deinit(&inter1);
+                interface_deinit(&inter2);
+                return INVALID_ARGUMENT;
+            }
         }
         else if (type1 == STATION)
         {
@@ -152,7 +159,13 @@ ERREUR_CODE file_connexions_create(FILE* fptr, Reseau** lan)
         {
             Switch* sw2 = NULL;
             appareil_get_switch(app2, &sw2);
-            switch_set_interface(sw2, inter2);
+            if (switch_set_interface(sw2, inter2) != OK)
+            {
+                fprintf(stderr, "Erreur config : le switch %zu n'a pas assez de ports "
+                        "declares pour accueillir toutes ses connexions.\n", indexInter2);
+                interface_deinit(&inter2);
+                return INVALID_ARGUMENT;
+            }
         }
         else if (type2 == STATION)
         {
@@ -181,7 +194,12 @@ ERREUR_CODE file_parse(char* path, Reseau** lan)
     if ((err = lan_nombre_machine(*lan, &nbMachines)) != OK) return err;
 
     if ((err = file_equipements_create(fptr, nbMachines, lan)) != OK) return err;
-    if ((err = file_connexions_create(fptr, lan)) != OK) return err;
+    if ((err = file_connexions_create(fptr, lan)) != OK)
+    {
+        file_deinit(fptr);
+        lan_deinit(lan);
+        return err;
+    }
 
     file_deinit(fptr);
     return OK;

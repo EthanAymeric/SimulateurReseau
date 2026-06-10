@@ -126,3 +126,17 @@ ERREUR_CODE interface_vider_buffer(Interface* inter)
     inter->nbElementBuffer = 0;
     return OK;
 }
+
+ERREUR_CODE interface_get_autre_appareil(Interface* inter, Interface** autre)
+{
+    if (inter == NULL || autre == NULL) return POINTEUR_NULL;
+    *autre = inter->autreAppareil;
+    return OK;
+}
+
+ERREUR_CODE interface_get_poids(Interface* inter, size_t* poids)
+{
+    if (inter == NULL || poids == NULL) return POINTEUR_NULL;
+    *poids = inter->poids;
+    return OK;
+}

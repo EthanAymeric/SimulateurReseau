@@ -19,6 +19,8 @@ ERREUR_CODE interface_set_interface(Interface* inter, Interface* other);
 ERREUR_CODE interface_traite_trame(Interface* inter);
 ERREUR_CODE interface_get_trame(Interface* inter, size_t index, Trame** trame);
 ERREUR_CODE interface_vider_buffer(Interface* inter);
+ERREUR_CODE interface_get_autre_appareil(Interface* inter, Interface** autre);
+ERREUR_CODE interface_get_poids(Interface* inter, size_t* poids);
 
 
 
