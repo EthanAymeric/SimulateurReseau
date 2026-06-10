@@ -117,6 +117,11 @@ ERREUR_CODE file_connexions_create(FILE* fptr, Reseau** lan)
         size_t indexInter2 = atoi(interface2_str);
         size_t poids = atoi(poids_str);
 
+        if (poids == 0)
+        {
+            return VALEUR;
+        }
+
         appareil* app1 = NULL;
         appareil* app2 = NULL;
         lan_get_machine(*lan, indexInter1,&app1);
